@@ -1,45 +1,37 @@
-import React from "react";
+import { Button } from "@chakra-ui/button";
+import { FormLabel } from "@chakra-ui/form-control";
+import { useDisclosure } from "@chakra-ui/hooks";
+import { Icon } from "@chakra-ui/icon";
+import { Image } from "@chakra-ui/image";
+import { Input } from "@chakra-ui/input";
+import { Box, Grid, GridItem, HStack, VStack } from "@chakra-ui/layout";
 import {
-  Box,
-  Grid,
-  GridItem,
-  FormLabel,
-  Input,
-  Textarea,
-  RadioGroup,
-  Radio,
-  HStack,
-  Select,
-  VStack,
-  Icon,
-  Image,
-  Button,
   Modal,
-  ModalOverlay,
-  ModalHeader,
-  ModalContent,
-  ModalCloseButton,
   ModalBody,
-  Lorem,
+  ModalCloseButton,
+  ModalContent,
   ModalFooter,
-  useDisclosure,
-} from "@chakra-ui/react";
-import { BiPlus, BiEdit } from "react-icons/bi";
-import UserLayout from "./UserLayout";
+  ModalHeader,
+  ModalOverlay,
+} from "@chakra-ui/modal";
+import { Radio, RadioGroup } from "@chakra-ui/radio";
+import { Select } from "@chakra-ui/select";
+import { Textarea } from "@chakra-ui/textarea";
+import React from "react";
+import { BiEdit, BiPlus } from "react-icons/bi";
+import CandidateLayout from "./components/CandidateLayout";
 
-const Profile = () => {
+const Candidate = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <UserLayout>
+    <CandidateLayout>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <Lorem count={2} />
-          </ModalBody>
+          <ModalBody>{/* <Lorem count={2} /> */}</ModalBody>
 
           <ModalFooter>
             <Button colorSc>Secondary Action</Button>
@@ -213,8 +205,8 @@ const Profile = () => {
           </HStack>
         </Box>
       </VStack>
-    </UserLayout>
+    </CandidateLayout>
   );
 };
 
-export default Profile;
+export default Candidate;

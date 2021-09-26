@@ -1,28 +1,24 @@
+import { Button } from "@chakra-ui/button";
+import { useDisclosure } from "@chakra-ui/hooks";
+import { Image } from "@chakra-ui/image";
+import { Box, Grid, HStack, Text, VStack } from "@chakra-ui/layout";
 import {
-  Box,
-  Button,
-  Grid,
-  HStack,
-  Image,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Text,
-  useDisclosure,
-  VStack,
-} from "@chakra-ui/react";
+} from "@chakra-ui/modal";
+import { formatEther } from "@ethersproject/units";
+import Logo from "assets/images/logo.png";
 import { ReactComponent as MetamaskIcon } from "assets/images/metamask.svg";
 import { ReactComponent as WalletConnectIcon } from "assets/images/walletconnect.svg";
 import { injected } from "connectors";
 import { useWallet } from "connectors/hooks";
-import { ethers } from "ethers";
 import { useActiveWeb3React } from "hooks/useActiveWeb3React";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Logo from "assets/images/logo.png";
 
 export const Layout = ({ children }) => {
   const { account, isConnected, library } = useActiveWeb3React();
@@ -36,9 +32,7 @@ export const Layout = ({ children }) => {
       library
         .getBalance(account, "latest")
         .then((balance) =>
-          setETHBalance(
-            parseFloat(ethers.utils.formatEther(balance.toString())).toFixed(4)
-          )
+          setETHBalance(parseFloat(formatEther(balance.toString())).toFixed(4))
         );
     };
 
@@ -109,7 +103,7 @@ export const Layout = ({ children }) => {
               {ETHBalacne && (
                 <Button colorScheme="teal">{ETHBalacne} ETH</Button>
               )}
-              <Link to="/profile">
+              <Link to="/candidate">
                 <Button colorScheme="teal">{account}</Button>
               </Link>
             </HStack>

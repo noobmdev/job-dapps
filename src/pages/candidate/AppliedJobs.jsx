@@ -3,11 +3,11 @@ import React from "react";
 import { ImHourGlass } from "react-icons/im";
 import { MdLocationOn, MdMonetizationOn, MdWork } from "react-icons/md";
 import { Link } from "react-router-dom";
-import UserLayout from "./UserLayout";
+import CandidateLayout from "./components/CandidateLayout";
 
 const AppliedJobs = () => {
   return (
-    <UserLayout>
+    <CandidateLayout>
       <Grid templateColumns="repeat(2, 1fr)" gap="8">
         {new Array(4).fill("").map((item, idx) => (
           <Link to={`/jobs/${idx + 10}`}>
@@ -61,7 +61,7 @@ const AppliedJobs = () => {
           </Link>
         ))}
       </Grid>
-    </UserLayout>
+    </CandidateLayout>
   );
 };
 
