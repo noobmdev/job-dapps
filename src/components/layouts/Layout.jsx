@@ -92,8 +92,12 @@ export const Layout = ({ children }) => {
 
       <HStack h="14" px="8" py="4" align="center" bg="#2d333a">
         <Link to="/">
-          <Box h="20">
-            <Image h="100%" src={Logo} alt="logo" />
+          <Box h="14">
+            <Image
+              h="100%"
+              src="https://res.cloudinary.com/munumber2/image/upload/v1634747465/LOGO_ehr87k_qcxtqf.png"
+              alt="logo"
+            />
           </Box>
         </Link>
 

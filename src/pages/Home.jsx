@@ -48,32 +48,34 @@ const Home = () => {
   useEffect(() => {
     async function getRecruiters() {
       if (latestRecruiterId) {
-        let firstIndex = BigNumber.from(currentPage - 1).mul(
-          BigNumber.from(perPage)
-        );
-        let lastIndex = BigNumber.from(currentPage).mul(
-          BigNumber.from(perPage)
-        );
-        if (latestRecruiterId.gt(lastIndex)) {
-          console.log("greater");
-        } else {
-          console.log("lesser");
-          // for(let i = firstIndex; i)
-          // new Array(latestRecruiterId.add(BigNumber.from("1")).sub(firstIndex))
-          console.log(
-            latestRecruiterId.add(BigNumber.from("1")).sub(firstIndex)
-          );
-          // while (firstIndex.lte(latestRecruiterId)) {
-          //   callContract(jobCoreContract, JOB_CORE_METHODS.recruiters, [
-          //     1,
-          //   ]).then(console.log);
-          // }
-        }
-        // jobCoreContract.recruiters(1).then(console.log);
-        // callContract(jobCoreContract, JOB_CORE_METHODS.recruiters, [1]).then(
-        //   console.log
+        // let firstIndex = BigNumber.from(currentPage - 1).mul(
+        //   BigNumber.from(perPage)
         // );
-        // setLatestRecruiterId(latestRecruiterId)
+        // let lastIndex = BigNumber.from(currentPage).mul(
+        //   BigNumber.from(perPage)
+        // );
+        // if (latestRecruiterId.gt(lastIndex)) {
+        //   console.log("greater");
+        // } else {
+        //   console.log("lesser");
+        //   // for(let i = firstIndex; i)
+        //   // new Array(latestRecruiterId.add(BigNumber.from("1")).sub(firstIndex))
+        //   console.log(
+        //     latestRecruiterId.add(BigNumber.from("1")).sub(firstIndex)
+        //   );
+        // }
+
+        // // callContract(jobCoreContract, JOB_CORE_METHODS.recruiters, [1]).then(
+        // //   console.log
+        // // );
+        // // setLatestRecruiterId(latestRecruiterId)
+        for (
+          let i = BigNumber.from("1");
+          i.lte(latestRecruiterId);
+          i.add(BigNumber.from("1"))
+        ) {
+          jobCoreContract.recruiters(i).then(console.log);
+        }
       }
     }
     getRecruiters();
