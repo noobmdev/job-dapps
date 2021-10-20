@@ -1,19 +1,62 @@
-import { Box, Grid, Image, HStack, Icon, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  Image,
+  HStack,
+  Icon,
+  VStack,
+  InputGroup,
+  InputLeftElement,
+  Input,
+  Button,
+  Select,
+} from "@chakra-ui/react";
 import React from "react";
-import { MdLocationOn, MdWork, MdMonetizationOn } from "react-icons/md";
+import {
+  MdLocationOn,
+  MdWork,
+  MdMonetizationOn,
+  MdSearch,
+} from "react-icons/md";
 import { ImHourGlass } from "react-icons/im";
 import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
     <Box>
-      <Box fontWeight="bold" fontSize="3xl" textAlign="center" pb="4">
+      <HStack px="40" py="4" spacing="4">
+        <InputGroup>
+          <InputLeftElement
+            pointerEvents="none"
+            children={<Icon as={MdSearch} color="gray.500" />}
+          />
+          <Input type="text" placeholder="Skills or positions" />
+        </InputGroup>
+        <HStack minW="12em" pos="relative">
+          {/* <Input type="text" placeholder="Locations" /> */}
+          <Select color="gray.500" variant="outline" defaultValue="">
+            <option value="" style={{ display: "none" }}>
+              Locations
+            </option>
+            <option value="All">All cities</option>
+            <option value="Ha Noi">Ha Noi</option>
+            <option value="Da Nang">Da Nang</option>
+            <option value="Ho Chi Minh">Ho Chi Minh</option>
+          </Select>
+        </HStack>
+        <Button px="8" colorScheme="blue">
+          Search
+        </Button>
+      </HStack>
+
+      <Box fontWeight="semibold" fontSize="3xl" textAlign="center" pb="4">
         Suitable Jobs
       </Box>
       <Grid templateColumns="repeat(2, 1fr)" gap="8">
         {new Array(10).fill("").map((item, idx) => (
           <Link to={`/jobs/${idx + 10}`}>
             <HStack
+              className="hover-shadow"
               key={idx}
               textAlign="center"
               p="4"
@@ -61,6 +104,48 @@ const Home = () => {
               </VStack>
             </HStack>
           </Link>
+        ))}
+      </Grid>
+
+      {/* Pagging */}
+      <HStack align="center" justify="center" my="8" spacing="4">
+        {new Array(4).fill("").map((e, idx) => (
+          <Box
+            px="4"
+            py="2"
+            border="1px solid"
+            borderColor="#ff523b"
+            cursor="pointer"
+          >
+            {idx + 1}
+          </Box>
+        ))}
+        <Box
+          px="4"
+          py="2"
+          border="1px solid"
+          borderColor="#ff523b"
+          cursor="pointer"
+        >
+          &gt;
+        </Box>
+      </HStack>
+
+      {/* Recuiters */}
+      <Box fontWeight="semibold" fontSize="3xl" textAlign="center" p="4">
+        Featured Recruiters
+      </Box>
+      <Grid templateColumns="repeat(4, 1fr)" gap="8">
+        {new Array(8).fill("").map((e) => (
+          <Box className="hover-shadow" cursor="pointer">
+            <Image
+              border="2px solid"
+              borderColor="gray.300"
+              borderRadius="md"
+              src="https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG6_xvzgd8.png"
+              alt="Segun Adebayo"
+            />
+          </Box>
         ))}
       </Grid>
     </Box>

@@ -53,7 +53,7 @@ export function useContract(address, ABI, withSignerIfPossible = true) {
     }
   }, [address, ABI, library, withSignerIfPossible, account]);
 }
-export async function sendToContract(contract, method, args, overrides = {}) {
+export async function callContract(contract, method, args, overrides = {}) {
   // const callstatic = await contract.callStatic[method](
   //   ...args,
   //   {
