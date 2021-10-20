@@ -1,10 +1,67 @@
 import { Box, Grid, Image, HStack, Icon, VStack } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MdLocationOn, MdWork, MdMonetizationOn } from "react-icons/md";
 import { ImHourGlass } from "react-icons/im";
 import { Link } from "react-router-dom";
+import { callContract, useJobCoreContract } from "hooks/useContract";
+import { BigNumber } from "@ethersproject/bignumber";
+import { JOB_CORE_METHODS } from "configs";
 
 const Home = () => {
+  const jobCoreContract = useJobCoreContract();
+
+  const [latestRecruiterId, setLatestRecruiterId] = useState();
+  const [recruiters, setRecruiter] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+
+  useEffect(() => {
+    async function getLatestRecruiterId() {
+      if (jobCoreContract) {
+        callContract(
+          jobCoreContract,
+          JOB_CORE_METHODS.latestRecruiterId,
+          []
+        ).then((latestRecruiterId) => setLatestRecruiterId(latestRecruiterId));
+      }
+    }
+    getLatestRecruiterId();
+  }, [jobCoreContract]);
+
+  useEffect(() => {
+    async function getRecruiters() {
+      if (latestRecruiterId) {
+        let firstIndex = BigNumber.from(currentPage - 1).mul(
+          BigNumber.from(perPage)
+        );
+        let lastIndex = BigNumber.from(currentPage).mul(
+          BigNumber.from(perPage)
+        );
+        if (latestRecruiterId.gt(lastIndex)) {
+          console.log("greater");
+        } else {
+          console.log("lesser");
+          // for(let i = firstIndex; i)
+          // new Array(latestRecruiterId.add(BigNumber.from("1")).sub(firstIndex))
+          console.log(
+            latestRecruiterId.add(BigNumber.from("1")).sub(firstIndex)
+          );
+          // while (firstIndex.lte(latestRecruiterId)) {
+          //   callContract(jobCoreContract, JOB_CORE_METHODS.recruiters, [
+          //     1,
+          //   ]).then(console.log);
+          // }
+        }
+        // jobCoreContract.recruiters(1).then(console.log);
+        // callContract(jobCoreContract, JOB_CORE_METHODS.recruiters, [1]).then(
+        //   console.log
+        // );
+        // setLatestRecruiterId(latestRecruiterId)
+      }
+    }
+    getRecruiters();
+  }, [latestRecruiterId, currentPage, perPage]);
+
   return (
     <Box>
       <Box fontWeight="bold" fontSize="3xl" textAlign="center" pb="4">
