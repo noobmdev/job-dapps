@@ -2,6 +2,8 @@ import { Contract } from "@ethersproject/contracts";
 import { getAddress } from "@ethersproject/address";
 import { useWeb3React } from "@web3-react/core";
 import { useMemo } from "react";
+import { JOB_CORE_ADDRESS } from "configs";
+import JobCoreABI from "abis/JobCore.json";
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value) {
@@ -69,4 +71,8 @@ export async function callContract(contract, method, args, overrides = {}) {
   if (!tx) throw new Error("cannot create transaction");
   const res = await tx.wait();
   return res;
+}
+
+export function useJobCoreContract() {
+  return useContract(JOB_CORE_ADDRESS, JobCoreABI);
 }
