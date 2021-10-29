@@ -62,15 +62,20 @@ export async function callContract(contract, method, args, overrides = {}) {
   //     ...overrides
   //   }
   // )
-  // console.log("callstatic",callstatic)
-  const tx = await contract[method](...args, {
-    ...overrides,
-  });
-  if (typeof tx.wait !== "function") return tx;
+  try {
+    const tx = await contract[method](...args, {
+      ...overrides,
+    });
+    // console.log(tx);
+    if (typeof tx.wait !== "function") return tx;
 
-  if (!tx) throw new Error("cannot create transaction");
-  const res = await tx.wait();
-  return res;
+    if (!tx) throw new Error("cannot create transaction");
+    const res = await tx.wait();
+    return res;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 export function useJobCoreContract() {

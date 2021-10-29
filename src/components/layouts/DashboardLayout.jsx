@@ -11,7 +11,6 @@ const DashboardLayout = ({
   menuList = [],
 }) => {
   const { pathname } = useLocation();
-  console.log(pathname);
   return (
     <HStack align="flex-start">
       <Box w={{ base: 48, md: 72, xl: 96 }}>

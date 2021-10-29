@@ -8,21 +8,67 @@ import { Box, Grid, GridItem, HStack, VStack } from "@chakra-ui/layout";
 import { Radio, RadioGroup } from "@chakra-ui/radio";
 import { Select } from "@chakra-ui/select";
 import { Textarea } from "@chakra-ui/textarea";
-import React from "react";
+import { JOB_CORE_METHODS, ZeroBigNumber } from "configs";
+import { useActiveWeb3React } from "hooks/useActiveWeb3React";
+import { callContract, useJobCoreContract } from "hooks/useContract";
+import React, { useEffect, useState } from "react";
 import { BiEdit, BiPlus } from "react-icons/bi";
+import { removeNumericKey } from "utils";
 import RecruiterLayout from "./components/RecruiterLayout";
 
 const companySizes = [
   "1 - 9",
   "10 - 49",
   "50 - 99",
-  "100- 299",
-  "300-999",
+  "100 - 299",
+  "300 - 999",
   "> 1000",
 ];
 
 const Recruiter = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { account } = useActiveWeb3React();
+
+  const jobCoreContract = useJobCoreContract();
+
+  const [recruiter, setRecruiter] = useState({
+    name: "",
+    headquarter: "",
+    website: "",
+    companySize: companySizes[0],
+    contact: "",
+    addr: "",
+  });
+
+  useEffect(() => {
+    async function getRecruiterProfile() {
+      if (jobCoreContract && account) {
+        const recruiterId = await callContract(
+          jobCoreContract,
+          JOB_CORE_METHODS.recruiterToId,
+          [account]
+        );
+        if (!ZeroBigNumber.eq(recruiterId)) {
+          const recruiter = await callContract(
+            jobCoreContract,
+            JOB_CORE_METHODS.recruiters,
+            [recruiterId]
+          );
+          const _recruiter = removeNumericKey(recruiter);
+          setRecruiter((pre) => ({ ...pre, ..._recruiter }));
+        }
+      }
+    }
+
+    getRecruiterProfile();
+  }, [jobCoreContract, account]);
+
+  // useEffect(() => {
+  //   if (recruiter) {
+  //     console.log(recruiter);
+  //     setRecruiterInfo(recruiter);
+  //   }
+  // }, [recruiter]);
 
   return (
     <RecruiterLayout>
@@ -32,20 +78,26 @@ const Recruiter = () => {
             <Box fontSize="2xl" fontWeight="semibold">
               Company Information
             </Box>
-            <Icon w="8" h="8" as={BiEdit} cursor="pointer" />
+            {/* <Icon w="8" h="8" as={BiEdit} cursor="pointer" /> */}
           </HStack>
           <Grid templateColumns="repeat(2, 1fr)" gap="4">
             <GridItem>
               <FormLabel>Company name</FormLabel>
-              <Input placeholder="Company name" />
+              <Input
+                value={recruiter.name}
+                // onChange={(e) =>
+                //   setRecruiter((info) => ({
+                //     ...info,
+                //     name: e.target.value,
+                //   }))
+                // }
+                placeholder="Company name"
+              />
             </GridItem>
             <GridItem rowSpan="2">
               <HStack justify="center">
                 <Box boxSize="70%" role="group" pos="relative" p="4">
-                  <Image
-                    src="https://cdn1.timviecnhanh.com/asset/home/img/employer/5ac2f45827a14_1522725976.jpg"
-                    alt="logo"
-                  />
+                  <Image src={recruiter.logo} alt="logo" />
                   <Box
                     pos="absolute"
                     top="0"
@@ -67,17 +119,17 @@ const Recruiter = () => {
             </GridItem>
             <GridItem>
               <FormLabel>Headquarters</FormLabel>
-              <Input placeholder="Headquarters" />
+              <Input value={recruiter.headquarter} placeholder="Headquarters" />
             </GridItem>
 
             <GridItem>
               <FormLabel>Website</FormLabel>
-              <Input placeholder="Website" />
+              <Input value={recruiter.website} placeholder="Website" />
             </GridItem>
             <GridItem>
               <FormLabel>Company size</FormLabel>
               <Box>
-                <Select defaultValue="1 - 9">
+                <Select value={recruiter.name}>
                   {companySizes.map((item, idx) => (
                     <option key={idx} value="item">
                       {item} people
@@ -88,11 +140,14 @@ const Recruiter = () => {
             </GridItem>
             <GridItem colSpan="2">
               <FormLabel>Contact</FormLabel>
-              <Input placeholder="Contact" />
+              <Input value={recruiter.contact} placeholder="Contact" />
             </GridItem>
             <GridItem colSpan="2">
               <FormLabel>Company address</FormLabel>
-              <Input placeholder="Company address" />
+              <Input
+                value={recruiter.companySize}
+                placeholder="Company address"
+              />
             </GridItem>
           </Grid>
         </Box>

@@ -76,7 +76,6 @@ export const useWallet = () => {
   const { activate, deactivate } = useWeb3React();
 
   const connect = useCallback((connector) => {
-    console.log("connector", connector);
     activate(connector).then(console.log).catch(console.error);
   }, []);
 
