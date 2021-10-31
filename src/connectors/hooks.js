@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useWeb3React } from "@web3-react/core";
+import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
 
 import { injected } from "./index";
 
@@ -72,19 +72,72 @@ export function useInactiveListener(suppress) {
   }, [active, error, suppress, activate]);
 }
 
+const setupDefaultNetwork = async () => {
+  const provider = window.ethereum;
+  if (provider) {
+    const chainId = 97;
+    try {
+      await provider.request({
+        method: "wallet_addEthereumChain",
+        params: [
+          {
+            chainId: `0x${chainId.toString(16)}`,
+            chainName: "Binance Smart Chain Testnet",
+            nativeCurrency: {
+              name: "BNB",
+              symbol: "bnb",
+              decimals: 18,
+            },
+            rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+          },
+        ],
+      });
+      return true;
+    } catch (error) {
+      console.error("Failed to setup the network in Metamask:", error);
+      return false;
+    }
+  } else {
+    console.error(
+      "Can't setup the BSC network on metamask because window.ethereum is undefined"
+    );
+    return false;
+  }
+};
+
 export const useWallet = () => {
-  const { activate, deactivate } = useWeb3React();
+  const { activate, deactivate, error } = useWeb3React();
+  const [currentConnector, setCurrentConnector] = useState();
+
+  useEffect(() => {
+    const catchError = async () => {
+      console.log(currentConnector);
+      console.log(error && error instanceof UnsupportedChainIdError);
+      if (error && error instanceof UnsupportedChainIdError) {
+        const hasSetup = await setupDefaultNetwork();
+        if (hasSetup) {
+          activate(currentConnector);
+        }
+      } else {
+        console.error("CONNECT: error connection");
+      }
+    };
+
+    catchError();
+  }, [error]);
 
   const connect = useCallback((connector) => {
-    activate(connector).then(console.log).catch(console.error);
+    setCurrentConnector(connector);
+    activate(connector);
   }, []);
 
   const disconnect = useCallback(() => {
-    deactivate().then(console.log).catch(console.error);
+    deactivate();
   }, [deactivate]);
 
   return {
     connect,
     disconnect,
+    error,
   };
 };

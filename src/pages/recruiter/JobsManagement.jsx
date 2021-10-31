@@ -1,12 +1,9 @@
-import { Box, Grid, HStack, VStack } from "@chakra-ui/layout";
-import { Image } from "@chakra-ui/image";
-import { Icon } from "@chakra-ui/icon";
 import { Button } from "@chakra-ui/button";
-import React, { useEffect, useState } from "react";
-import { ImHourGlass } from "react-icons/im";
-import { MdLocationOn, MdMonetizationOn, MdWork } from "react-icons/md";
-import { Link } from "react-router-dom";
-import RecruiterLayout from "./components/RecruiterLayout";
+import { Checkbox, CheckboxGroup } from "@chakra-ui/checkbox";
+import { FormControl, FormLabel } from "@chakra-ui/form-control";
+import { useDisclosure } from "@chakra-ui/hooks";
+import { Input } from "@chakra-ui/input";
+import { Box, Grid, HStack, VStack } from "@chakra-ui/layout";
 import {
   Modal,
   ModalBody,
@@ -16,9 +13,6 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/modal";
-import { useDisclosure } from "@chakra-ui/hooks";
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
-import { Input } from "@chakra-ui/input";
 import {
   NumberDecrementStepper,
   NumberIncrementStepper,
@@ -26,12 +20,26 @@ import {
   NumberInputField,
   NumberInputStepper,
 } from "@chakra-ui/number-input";
+import { Select } from "@chakra-ui/select";
+import { Spinner } from "@chakra-ui/spinner";
 import { Textarea } from "@chakra-ui/textarea";
-import { callContract, useJobCoreContract } from "hooks/useContract";
-import { JOB_CORE_METHODS } from "configs";
-import { removeNumericKey } from "utils";
 import Job from "components/Job";
-import { Spinner } from "@chakra-ui/react";
+import { JOB_CORE_METHODS, LOCATIONS, SKILLS } from "configs";
+import { callContract, useJobCoreContract } from "hooks/useContract";
+import React, { useEffect, useState } from "react";
+import { removeNumericKey } from "utils";
+import RecruiterLayout from "./components/RecruiterLayout";
+
+const EXPERIENCES = [
+  "No experience",
+  "6 month",
+  "1 year",
+  "2 years",
+  "3 years",
+  "4 years",
+  "5 years",
+  "> 5 years",
+];
 
 const JobsManagement = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -48,7 +56,7 @@ const JobsManagement = () => {
     salaryMin: 10,
     salaryMax: 10,
     location: "",
-    experience: "",
+    experience: EXPERIENCES[0],
     descriptions: "",
     benefits: "",
     requirements: "",
@@ -153,18 +161,34 @@ const JobsManagement = () => {
 
               <FormControl isRequired>
                 <FormLabel>Location</FormLabel>
-                <Input
+                <Select
                   value={jobInfo.location}
                   onChange={(e) =>
                     setJobInfo((job) => ({ ...job, location: e.target.value }))
                   }
-                  placeholder="Location"
-                />
+                >
+                  {Object.values(LOCATIONS).map((l) => (
+                    <option key={l} value={l}>
+                      {l}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl isRequired>
+                <FormLabel>Skills</FormLabel>
+                <CheckboxGroup colorScheme="green">
+                  <Grid templateColumns="repeat(3, 1fr)" gap="2">
+                    {Object.values(SKILLS).map((s) => (
+                      <Checkbox value={s}>{s}</Checkbox>
+                    ))}
+                  </Grid>
+                </CheckboxGroup>
               </FormControl>
 
               <FormControl isRequired>
                 <FormLabel>Experience</FormLabel>
-                <Input
+                <Select
                   value={jobInfo.experience}
                   onChange={(e) =>
                     setJobInfo((job) => ({
@@ -172,8 +196,13 @@ const JobsManagement = () => {
                       experience: e.target.value,
                     }))
                   }
-                  placeholder="Experience"
-                />
+                >
+                  {EXPERIENCES.map((exp) => (
+                    <option key={exp} value={exp}>
+                      {exp}
+                    </option>
+                  ))}
+                </Select>
               </FormControl>
 
               <FormControl isRequired>

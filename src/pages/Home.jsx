@@ -22,7 +22,7 @@ import { ImHourGlass } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { callContract, useJobCoreContract } from "hooks/useContract";
 import { BigNumber } from "@ethersproject/bignumber";
-import { JOB_CORE_METHODS, OneBigNumber } from "configs";
+import { JOB_CORE_METHODS, LOCATIONS, OneBigNumber } from "configs";
 import { removeNumericKey, timeLeft } from "utils";
 import Job from "components/Job";
 
@@ -130,10 +130,11 @@ const Home = () => {
             <option value="" style={{ display: "none" }}>
               Locations
             </option>
-            <option value="All">All cities</option>
-            <option value="Ha Noi">Ha Noi</option>
-            <option value="Da Nang">Da Nang</option>
-            <option value="Ho Chi Minh">Ho Chi Minh</option>
+            {Object.values(LOCATIONS).map((l) => (
+              <option key={l} value={l}>
+                {l}
+              </option>
+            ))}
           </Select>
         </HStack>
         <Button px="8" colorScheme="teal">

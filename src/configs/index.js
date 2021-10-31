@@ -17,3 +17,20 @@ export const JOB_CORE_METHODS = {
 
 export const OneBigNumber = BigNumber.from("1");
 export const ZeroBigNumber = BigNumber.from("0");
+
+export const LOCATIONS = {
+  ALL: "All cities",
+  HA_NOI: "Ha Noi",
+  HO_CHI_MINH: "Ho Chi Minh",
+  DA_NANG: "Da Nang",
+  OTHER: "Other",
+};
+
+export const SKILLS = {
+  BLOCKCHAIN: "Blockchain",
+  JAVASCRIPT: "Javascript",
+  HTML_CSS: "HTML & CSS",
+  DATABASE: "Database",
+  GIT: "Git",
+  OTHER: "Other",
+};
