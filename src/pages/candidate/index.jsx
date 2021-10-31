@@ -17,12 +17,79 @@ import {
 import { Radio, RadioGroup } from "@chakra-ui/radio";
 import { Select } from "@chakra-ui/select";
 import { Textarea } from "@chakra-ui/textarea";
-import React from "react";
+import { JOB_CORE_METHODS } from "configs";
+import { useActiveWeb3React } from "hooks/useActiveWeb3React";
+import { callContract, useJobCoreContract } from "hooks/useContract";
+import React, { useEffect, useState } from "react";
 import { BiEdit, BiPlus } from "react-icons/bi";
+import { uploadIPFS } from "services/upload-ipfs";
+import { removeNumericKey } from "utils";
 import CandidateLayout from "./components/CandidateLayout";
+import PersonalInformation from "./components/PersonalInformation";
+
+const CandidateInfoType = {
+  personalInfo: "personalInfo",
+};
 
 const Candidate = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { account } = useActiveWeb3React();
+  const jobCoreContract = useJobCoreContract();
+
+  const [refresh, setRefresh] = useState(true); // TODO change trigger refresh data
+  const [candidateProfile, setCandidateProfile] = useState();
+
+  useEffect(() => {
+    async function getRecruiterProfile() {
+      try {
+        if (jobCoreContract && account) {
+          const resume = await callContract(
+            jobCoreContract,
+            JOB_CORE_METHODS.getCurrentResume,
+            []
+          );
+          console.log(resume.url);
+          if (resume.url) {
+            fetch(resume.url)
+              .then((res) => res.json())
+              .then((out) => setCandidateProfile(out))
+              .catch((err) => console.error(err));
+          }
+          // setCandidateProfile((pre) => ({ ...pre, ..._recruiter }));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    getRecruiterProfile();
+  }, [jobCoreContract, account, refresh]);
+
+  const handleUpdateCurrentResume = async (payload, infoType) => {
+    try {
+      let data = {};
+      switch (infoType) {
+        case CandidateInfoType.personalInfo:
+          data[CandidateInfoType.personalInfo] = payload;
+          break;
+
+        default:
+          return;
+      }
+      const path = await uploadIPFS(data);
+      if (path && jobCoreContract) {
+        await callContract(
+          jobCoreContract,
+          JOB_CORE_METHODS.updateCurrentResume,
+          [path]
+        );
+        setRefresh((pre) => !pre);
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <CandidateLayout>
@@ -40,55 +107,15 @@ const Candidate = () => {
       </Modal>
 
       <VStack align="stretch" spacing="4">
-        <Box p="6" border="1px solid" borderColor="gray.300" borderRadius="md">
-          <HStack justify="space-between" align="center" pb="4">
-            <Box fontSize="2xl" fontWeight="semibold">
-              Personal Infomation
-            </Box>
-            <Icon onClick={onOpen} w="8" h="8" as={BiEdit} cursor="pointer" />
-          </HStack>
-          <Grid templateColumns="repeat(2, 1fr)" gap="4">
-            <GridItem colSpan="2">
-              <FormLabel>Full Name</FormLabel>
-              <Input placeholder="Full name" />
-            </GridItem>
-            <GridItem>
-              <FormLabel>Gender</FormLabel>
-              <RadioGroup defaultValue="2">
-                <HStack spacing="6">
-                  <Radio value="male">Male</Radio>
-                  <Radio value="female">Female</Radio>
-                </HStack>
-              </RadioGroup>
-            </GridItem>
-            <GridItem>
-              <FormLabel>Year of birthday</FormLabel>
-              <Select defaultValue={new Date().getFullYear()}>
-                {new Array(50)
-                  .fill(new Date().getFullYear())
-                  .map((item, idx) => (
-                    <option>{item - idx}</option>
-                  ))}
-              </Select>
-            </GridItem>
-            <GridItem>
-              <FormLabel>Email</FormLabel>
-              <Input placeholder="Email" />
-            </GridItem>
-            <GridItem>
-              <FormLabel>Phone</FormLabel>
-              <Input placeholder="Phone" />
-            </GridItem>
-            <GridItem colSpan="2">
-              <FormLabel>Address</FormLabel>
-              <Input placeholder="Address" />
-            </GridItem>
-            <GridItem colSpan="2">
-              <FormLabel>Bio</FormLabel>
-              <Textarea placeholder="Bio" />
-            </GridItem>
-          </Grid>
+        <Box>
+          <Button colorScheme="teal">Create resume</Button>
         </Box>
+
+        <PersonalInformation
+          candidateProfile={candidateProfile}
+          updateHandler={handleUpdateCurrentResume}
+          infoType={CandidateInfoType.personalInfo}
+        />
 
         <Box p="6" border="1px solid" borderColor="gray.300" borderRadius="md">
           <HStack justify="space-between" align="center" pb="4">
