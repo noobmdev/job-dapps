@@ -133,7 +133,11 @@ contract JobCore is Ownable {
         string title;
         uint256 salaryMin;
         uint256 salaryMax;
-        string desc;
+        string location;
+        string experience;
+        string descriptions;
+        string benefits;
+        string requirements;
         uint256 expiredIn; 
     }
     
@@ -154,11 +158,11 @@ contract JobCore is Ownable {
     // recruiterId => Recruiter
     mapping(uint256 => Recruiter) public recruiters;
     
-    // owner => jobId
-    Job[] public jobs;
+    // jobId => Job
+    mapping(uint256 => Job) public jobs;
     // jobId => owner
     mapping(uint256 => address) public jobOwner;
-    // owner => uint256[]
+    // owner => jobIds[]
     mapping(address => uint256[]) public ownerJobs;
     
     // address => Resume[]
@@ -180,31 +184,31 @@ contract JobCore is Ownable {
     */
     constructor() {
         address[8] memory recruiterAddresses = [
-                0x4Acf773BD581BdF5De5F9E6fc06589C3F6C791F9,
-                0x4Acf773BD581BdF5De5F9E6fc06589C3F6C791F9,
-                0x4Acf773BD581BdF5De5F9E6fc06589C3F6C791F9,
-                0x4Acf773BD581BdF5De5F9E6fc06589C3F6C791F9,
-                0x4Acf773BD581BdF5De5F9E6fc06589C3F6C791F9,
-                0x4Acf773BD581BdF5De5F9E6fc06589C3F6C791F9,
-                0x4Acf773BD581BdF5De5F9E6fc06589C3F6C791F9,
-                0x4Acf773BD581BdF5De5F9E6fc06589C3F6C791F9
-            ];
+            0xe9dd3CC74B6d57E8B27D4bF6cA96ffAeBEF4205e,
+            0x78033C72581fDc5593b8120760C70018eD42AA69,
+            0x78033C72581fDc5593b8120760C70018eD42AA69,
+            0x78033C72581fDc5593b8120760C70018eD42AA69,
+            0x78033C72581fDc5593b8120760C70018eD42AA69,
+            0x78033C72581fDc5593b8120760C70018eD42AA69,
+            0x78033C72581fDc5593b8120760C70018eD42AA69,
+            0x78033C72581fDc5593b8120760C70018eD42AA69
+        ];
         string[8] memory names = ["Company 1", "Company 2", "Company 3", "Company 4", "Company 5", "Company 6", "Company 7", "Company 8"];
         string[8] memory headquarters = ["Headquarter 1", "Headquarter 2", "Headquarter 3", "Headquarter 4", "Headquarter 5", "Headquarter 6", "Headquarter 7", "Headquarter 8"];
-        string[8] memory companySizes = ["1-10", "10-50", "1-10", "1-10", "10-50", "50-100", "1-10", "1-10"];
+        string[8] memory companySizes = ["1 - 9", "10 - 49", "1 - 9", "50 - 99", "100 - 299", "50 - 99", "300 - 999", "> 1000"];
         string[8] memory websites = ["https://web1.com", "https://web2.com", "https://web3.com", "https://web4.com", "https://web5.com", "https://web6.com", "https://web7.com", "https://web8.com"];
         string[8] memory contacts = ["Contact 1", "Contact 2", "Contact 3", "Contact 4", "Contact 5", "Contact 6", "Contact 7", "Contact 8"];
         string[8] memory addresses = ["Address 1", "Address 2", "Address 3", "Address 4", "Address 5", "Address 6", "Address 7", "Address 8"];
         string[8] memory logos = [
-                "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG1_vtcgeq.png",
-                "https://res.cloudinary.com/munumber2/image/upload/v1634401208/NHATUYENDUNG2_j4mhca.png", 
-                "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG3_utjokp.png", 
-                "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG4_h1djot.png", 
-                "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG5_w7xwkp.png", 
-                "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG6_xvzgd8.png", 
-                "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG7_ifgvt0.png", 
-                "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG6_xvzgd8.png"
-            ];
+            "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG1_vtcgeq.png",
+            "https://res.cloudinary.com/munumber2/image/upload/v1634401208/NHATUYENDUNG2_j4mhca.png", 
+            "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG3_utjokp.png", 
+            "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG4_h1djot.png", 
+            "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG5_w7xwkp.png", 
+            "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG6_xvzgd8.png", 
+            "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG7_ifgvt0.png", 
+            "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG6_xvzgd8.png"
+        ];
         
         
         for(uint8 i = 0; i < names.length; i++) {
@@ -275,18 +279,31 @@ contract JobCore is Ownable {
         return _latestRecruiterId;
     }
     
-    function addJob(string memory _title, uint256 _salaryMin, uint256 _salaryMax, string memory _desc) public onlyRecuiter returns(uint256) {
+    function addJob(
+        string memory _title, 
+        uint256 _salaryMin, 
+        uint256 _salaryMax, 
+        string memory _location,
+        string memory _experience,
+        string memory _descriptions,  
+        string memory _benefits, 
+        string memory _requirements
+    ) public onlyRecuiter returns(uint256) {
         latestJobId.increment();
         uint256 _latestJobId = latestJobId.current();
         
-        jobs.push(Job({
+        jobs[_latestJobId] = Job({
            id: _latestJobId,
            title: _title,
            salaryMin: _salaryMin,
            salaryMax: _salaryMax,
-           desc: _desc,
+           location: _location,
+           experience: _experience,
+           descriptions: _descriptions,
+           benefits: _benefits,
+           requirements: _requirements,
            expiredIn: block.timestamp + DEFAULT_EXPIRED_TIME
-        }));
+        });
         
         jobOwner[_latestJobId] = msg.sender;
         ownerJobs[msg.sender].push(_latestJobId);
@@ -299,18 +316,28 @@ contract JobCore is Ownable {
         return _latestJobId;
     }
     
-    function getOwnerJobs() view public returns(uint256[] memory) {
-        return ownerJobs[msg.sender];
+    function getOwnerJobs() view public returns(Job[] memory) {
+        uint256[] memory jobIds = ownerJobs[msg.sender];
+        Job[] memory _jobs = new Job[](jobIds.length);
+        uint256 count = 0;
+        uint256 totalOwnerJob = jobIds.length;
+        for(uint256 i = 0; i < totalOwnerJob; i++) {
+            _jobs[count] =  jobs[jobIds[i]];
+            count++;
+        }
+        return _jobs;
     }
     
-    // function getJobs() public returns(Job[] memory) {
-    //     Job[] memory _job;
-    //     uint256 _latestRecruiterId = latestRecruiterId.current();
-    //     uint256 _latestJobId = latestJobId.current();
-    //     for(uint i = 1; i <= _latestRecruiterId; i++) {
-    //         for(uint j = 0; i < jobs[])
-    //     }
-    // }
+    function getJobs() view public returns(Job[] memory) {
+        uint256 _latestJobId = latestJobId.current();
+        Job[] memory _jobs = new Job[](_latestJobId);
+        uint256 count = 0;
+        for(uint256 i = _latestJobId; i > 0; i--) {
+            _jobs[count] =  jobs[i];
+            count++;
+        }
+        return _jobs;
+    }
     
     function addResume(string memory _url) public returns(uint256) {
         latestResumeId.increment();
@@ -333,6 +360,10 @@ contract JobCore is Ownable {
             id: 0,
             url: _url
         });
+    }
+    
+     function getCurrentResume() view public returns(Resume memory) {
+        return currentResume[msg.sender];
     }
     
     function isAppliedJob(uint256 _jobId) view public returns(bool) {
