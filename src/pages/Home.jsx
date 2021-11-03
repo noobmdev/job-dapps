@@ -1,30 +1,15 @@
-import {
-  Box,
-  Grid,
-  Image,
-  HStack,
-  Icon,
-  VStack,
-  InputGroup,
-  InputLeftElement,
-  Input,
-  Button,
-  Select,
-} from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import {
-  MdLocationOn,
-  MdWork,
-  MdMonetizationOn,
-  MdSearch,
-} from "react-icons/md";
-import { ImHourGlass } from "react-icons/im";
-import { Link } from "react-router-dom";
-import { callContract, useJobCoreContract } from "hooks/useContract";
-import { BigNumber } from "@ethersproject/bignumber";
-import { JOB_CORE_METHODS, LOCATIONS, OneBigNumber } from "configs";
-import { removeNumericKey, timeLeft } from "utils";
+import { Button } from "@chakra-ui/button";
+import { Icon } from "@chakra-ui/icon";
+import { Image } from "@chakra-ui/image";
+import { Input, InputGroup, InputLeftElement } from "@chakra-ui/input";
+import { Box, Grid, HStack } from "@chakra-ui/layout";
+import { Select } from "@chakra-ui/select";
 import Job from "components/Job";
+import { JOB_CORE_METHODS, LOCATIONS } from "configs";
+import { callContract, useJobCoreContract } from "hooks/useContract";
+import React, { useEffect, useState } from "react";
+import { MdSearch } from "react-icons/md";
+import { removeNumericKey } from "utils";
 
 const Home = () => {
   const jobCoreContract = useJobCoreContract();

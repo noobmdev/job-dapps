@@ -1,18 +1,12 @@
-import { Button } from "@chakra-ui/button";
 import { FormLabel } from "@chakra-ui/form-control";
-import { useDisclosure } from "@chakra-ui/hooks";
-import { Icon } from "@chakra-ui/icon";
 import { Image } from "@chakra-ui/image";
 import { Input } from "@chakra-ui/input";
 import { Box, Grid, GridItem, HStack, VStack } from "@chakra-ui/layout";
-import { Radio, RadioGroup } from "@chakra-ui/radio";
 import { Select } from "@chakra-ui/select";
-import { Textarea } from "@chakra-ui/textarea";
 import { JOB_CORE_METHODS, ZeroBigNumber } from "configs";
 import { useActiveWeb3React } from "hooks/useActiveWeb3React";
 import { callContract, useJobCoreContract } from "hooks/useContract";
 import React, { useEffect, useState } from "react";
-import { BiEdit, BiPlus } from "react-icons/bi";
 import { removeNumericKey } from "utils";
 import RecruiterLayout from "./components/RecruiterLayout";
 
@@ -26,7 +20,6 @@ const companySizes = [
 ];
 
 const Recruiter = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const { account } = useActiveWeb3React();
 
   const jobCoreContract = useJobCoreContract();

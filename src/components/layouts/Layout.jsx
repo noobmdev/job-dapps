@@ -105,7 +105,7 @@ export const Layout = ({ children }) => {
           {isConnected ? (
             <HStack>
               {ETHBalacne && (
-                <Button colorScheme="teal">{ETHBalacne} ETH</Button>
+                <Button colorScheme="teal">{ETHBalacne} BNB</Button>
               )}
               <Link to="/candidate">
                 <Button colorScheme="teal">{account}</Button>

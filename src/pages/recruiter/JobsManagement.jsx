@@ -55,7 +55,7 @@ const JobsManagement = () => {
     title: "",
     salaryMin: 10,
     salaryMax: 10,
-    location: "",
+    location: LOCATIONS.ALL,
     experience: EXPERIENCES[0],
     descriptions: "",
     benefits: "",
@@ -269,7 +269,10 @@ const JobsManagement = () => {
           <Spinner />
         </Box>
       ) : (
-        <Grid templateColumns="repeat(2, 1fr)" gap="8">
+        <Grid
+          templateColumns={{ base: "repeat(1, 1fr)", xl: "repeat(2, 1fr)" }}
+          gap="8"
+        >
           {ownerJobs.map((job, idx) => (
             <Job job={job} key={idx} />
           ))}

@@ -220,7 +220,7 @@ contract JobCore is Ownable {
     / MODIFIERS
     */
     modifier onlyRecuiter {
-        require(recruiterToId[msg.sender] != 0, "RECRUITER: INVALID_RECRUITER_ADDRESS");
+        require(recruiterToId[_msgSender()] != 0, "RECRUITER: INVALID_RECRUITER_ADDRESS");
         _;
     }
     
@@ -304,9 +304,9 @@ contract JobCore is Ownable {
            requirements: _requirements,
            expiredIn: block.timestamp + DEFAULT_EXPIRED_TIME
         });
-        
-        jobOwner[_latestJobId] = msg.sender;
-        ownerJobs[msg.sender].push(_latestJobId);
+        address sender = _msgSender();
+        jobOwner[_latestJobId] = sender;
+        ownerJobs[sender].push(_latestJobId);
         
         return _latestJobId;
     }
@@ -328,7 +328,11 @@ contract JobCore is Ownable {
         return _jobs;
     }
     
-    function getJobs() view public returns(Job[] memory) {
+    function getJob(uint _jobId) view public isValidJobId(_jobId) returns(Job memory) {
+        return jobs[_jobId];
+    }
+    
+     function getJobs() view public returns(Job[] memory) {
         uint256 _latestJobId = latestJobId.current();
         Job[] memory _jobs = new Job[](_latestJobId);
         uint256 count = 0;
@@ -342,32 +346,32 @@ contract JobCore is Ownable {
     function addResume(string memory _url) public returns(uint256) {
         latestResumeId.increment();
         uint256 _latestResumeId = latestResumeId.current();
+        address sender = _msgSender();
+        resumeIndexs[_latestResumeId] = resumes[sender].length;
         
-        resumeIndexs[_latestResumeId] = resumes[msg.sender].length;
-        
-        resumes[msg.sender].push(Resume({
+        resumes[sender].push(Resume({
             id: _latestResumeId,
             url: _url
         }));
         
-        resumeOwner[_latestResumeId] = msg.sender;
+        resumeOwner[_latestResumeId] = sender;
         
         return _latestResumeId;
     } 
     
     function updateCurrentResume(string memory _url) public {
-        currentResume[msg.sender] = Resume({
+        currentResume[_msgSender()] = Resume({
             id: 0,
             url: _url
         });
     }
     
      function getCurrentResume() view public returns(Resume memory) {
-        return currentResume[msg.sender];
+        return currentResume[_msgSender()];
     }
     
     function isAppliedJob(uint256 _jobId) view public returns(bool) {
-        uint256[] memory _appliedJobs = appliedJobs[msg.sender];
+        uint256[] memory _appliedJobs = appliedJobs[_msgSender()];
         for(uint256 i = 0; i < _appliedJobs.length; i++) {
             if(_jobId == _appliedJobs[i]) {
                 return true;
@@ -388,15 +392,20 @@ contract JobCore is Ownable {
     
     
     function applyJob(uint256 _jobId, uint256 _resumeId) public isValidJobId(_jobId) isValidResumeId(_resumeId) {
+        require(resumeOwner[_resumeId] == _msgSender(), "RESUME: NOT_OWNER");
         require(!isAppliedJob(_jobId), "JOB: APPLIED_JOB");
         require(!isResumeApplied(_jobId, _resumeId), "JOB: APPLIED_JOB");
         
         appliedResumes[_jobId].push(_resumeId);
-        appliedJobs[msg.sender].push(_jobId);
+        appliedJobs[_msgSender()].push(_jobId);
+    }
+    
+    function getAppliedJobs() view public returns(uint256[] memory) {
+         return appliedJobs[_msgSender()];
     }
     
     function getOwnerResumes() view public returns(Resume[] memory) {
-        return resumes[msg.sender];
+        return resumes[_msgSender()];
     }
     
     function getAppliedResumeIds(uint256 _jobId) view public returns(uint256[] memory) {

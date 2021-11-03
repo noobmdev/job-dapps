@@ -1,33 +1,33 @@
-import { Box, HStack, Grid, VStack } from "@chakra-ui/layout";
-import { Select } from "@chakra-ui/select";
 import { Button } from "@chakra-ui/button";
+import { useDisclosure } from "@chakra-ui/hooks";
 import { Icon } from "@chakra-ui/icon";
 import { Image } from "@chakra-ui/image";
+import { Box, Grid, HStack, VStack } from "@chakra-ui/layout";
 import {
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
   ModalBody,
-  ModalFooter,
   ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
 } from "@chakra-ui/modal";
-import { useDisclosure } from "@chakra-ui/hooks";
-import {
-  MdLocationOn,
-  MdWork,
-  MdMonetizationOn,
-  MdContacts,
-} from "react-icons/md";
+import { Select } from "@chakra-ui/select";
+import { Spinner } from "@chakra-ui/spinner";
+import { JOB_CORE_METHODS } from "configs";
+import { callContract, useJobCoreContract } from "hooks/useContract";
+import { useEffect, useState } from "react";
+import { CgWebsite } from "react-icons/cg";
 import { ImHourGlass } from "react-icons/im";
 import { IoIosPeople } from "react-icons/io";
-import { CgWebsite } from "react-icons/cg";
-import { useEffect, useState } from "react";
-import { callContract, useJobCoreContract } from "hooks/useContract";
-import { JOB_CORE_METHODS } from "configs";
-import { removeNumericKey, timeLeft } from "utils";
+import {
+  MdContacts,
+  MdLocationOn,
+  MdMonetizationOn,
+  MdWork,
+} from "react-icons/md";
 import { useParams } from "react-router";
-import { Spinner } from "@chakra-ui/spinner";
+import { removeNumericKey, timeLeft } from "utils";
 
 const JobDetail = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -35,34 +35,73 @@ const JobDetail = () => {
   const { id: jobId } = useParams();
 
   const [job, setJob] = useState();
-  const [selectedCV, setSelectedCV] = useState("");
+  const [resumes, setResumes] = useState([]);
+  const [selectedResumeId, setSelectedResumeId] = useState();
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (jobCoreContract && jobId) {
-      callContract(jobCoreContract, JOB_CORE_METHODS.jobs, [jobId]).then(
-        async (e) => {
-          const job = removeNumericKey(e);
-          const recruiterAddress = await callContract(
-            jobCoreContract,
-            JOB_CORE_METHODS.jobOwner,
-            [job.id]
-          );
-          const recruiterId = await callContract(
-            jobCoreContract,
-            JOB_CORE_METHODS.recruiterToId,
-            [recruiterAddress]
-          );
-          const recruiter = await callContract(
-            jobCoreContract,
-            JOB_CORE_METHODS.recruiters,
-            [recruiterId]
-          );
-          const _recruiter = removeNumericKey(recruiter);
-          setJob({ ...job, recruiter: _recruiter });
-        }
-      );
+      try {
+        callContract(jobCoreContract, JOB_CORE_METHODS.getJob, [jobId]).then(
+          async (e) => {
+            console.log(e);
+            const job = removeNumericKey(e);
+            const recruiterAddress = await callContract(
+              jobCoreContract,
+              JOB_CORE_METHODS.jobOwner,
+              [job.id]
+            );
+            const recruiterId = await callContract(
+              jobCoreContract,
+              JOB_CORE_METHODS.recruiterToId,
+              [recruiterAddress]
+            );
+            const recruiter = await callContract(
+              jobCoreContract,
+              JOB_CORE_METHODS.recruiters,
+              [recruiterId]
+            );
+            const _recruiter = removeNumericKey(recruiter);
+            setJob({ ...job, recruiter: _recruiter });
+          }
+        );
+
+        callContract(jobCoreContract, JOB_CORE_METHODS.getOwnerResumes, [])
+          .then((resumes) => resumes.map(removeNumericKey))
+          .then(setResumes);
+      } catch (error) {
+        console.error("getJob", error);
+      }
     }
   }, [jobCoreContract, jobId]);
+
+  const applyJob = async () => {
+    try {
+      if (!selectedResumeId || !jobId || !job) return;
+
+      const isAppliedJob = await callContract(
+        jobCoreContract,
+        JOB_CORE_METHODS.isAppliedJob,
+        [jobId]
+      );
+
+      if (isAppliedJob) {
+        return alert("You already applied job");
+      }
+      setSubmitting(true);
+      await callContract(jobCoreContract, JOB_CORE_METHODS.applyJob, [
+        jobId,
+        selectedResumeId,
+      ]);
+      setSubmitting(false);
+      onClose();
+      alert("Apply job success");
+    } catch (error) {
+      setSubmitting(false);
+      console.log(error);
+      alert("ERROR apply job");
+    }
+  };
 
   return (
     <Box px="32">
@@ -74,29 +113,35 @@ const JobDetail = () => {
           <ModalBody>
             <Select
               placeholder="Choose your CV"
-              value={selectedCV}
-              onChange={(e) => setSelectedCV(e.target.value)}
+              value={selectedResumeId}
+              onChange={(e) => setSelectedResumeId(e.target.value)}
             >
-              {new Array(4).fill("").map((item, idx) => (
-                <option key={idx} value={idx}>
-                  CV {idx + 1}
+              {resumes.map((resume, idx) => (
+                <option key={idx} value={resume.id}>
+                  Resume {resume.id?.toString()}
                 </option>
               ))}
             </Select>
-            {selectedCV && (
+            {selectedResumeId && (
               <Box
                 pt="4"
                 textDecor="underline"
                 cursor="pointer"
                 color="teal.600"
               >
-                Download CV {selectedCV}
+                Download resume {selectedResumeId?.toString()}
               </Box>
             )}
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="teal">Apply</Button>
+            <Button
+              onClick={applyJob}
+              isLoading={submitting}
+              colorScheme="teal"
+            >
+              Apply
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

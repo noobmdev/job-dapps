@@ -58,12 +58,6 @@ const Candidate = () => {
               .catch((err) => console.error(err));
           }
         }
-
-        await callContract(
-          jobCoreContract,
-          JOB_CORE_METHODS.getOwnerResumes,
-          []
-        ).then(console.log);
       } catch (error) {
         console.error(error);
       }
