@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
 
 import { injected } from "./index";
+import { NoEthereumProviderError } from "@web3-react/injected-connector";
 
 export function useEagerConnect() {
   const { activate, active } = useWeb3React();
@@ -111,15 +112,20 @@ export const useWallet = () => {
 
   useEffect(() => {
     const catchError = async () => {
-      console.log(currentConnector);
-      console.log(error && error instanceof UnsupportedChainIdError);
-      if (error && error instanceof UnsupportedChainIdError) {
-        const hasSetup = await setupDefaultNetwork();
-        if (hasSetup) {
-          activate(currentConnector);
+      if (error) {
+        let errMessage;
+        if (error instanceof UnsupportedChainIdError) {
+          const hasSetup = await setupDefaultNetwork();
+          if (hasSetup) {
+            activate(currentConnector);
+          }
+        } else if (error instanceof NoEthereumProviderError) {
+          errMessage =
+            "NoEthereumProviderError: Please install metamask extension or visit website in app which has ethereum provider.";
         }
-      } else {
-        console.error("CONNECT: error connection");
+        if (errMessage) {
+          alert(errMessage);
+        }
       }
     };
 

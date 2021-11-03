@@ -151,7 +151,7 @@ contract JobCore is Ownable {
     */
     Counters.Counter latestRecruiterId;
     Counters.Counter latestJobId;
-    Counters.Counter latestResumeId;
+    Counters.Counter latestResumeId; 
     
     // owner => recruiterId
     mapping(address => uint256) public recruiterToId;

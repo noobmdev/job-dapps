@@ -13,6 +13,8 @@ export const JOB_CORE_METHODS = {
   jobs: "jobs",
   updateCurrentResume: "updateCurrentResume",
   getCurrentResume: "getCurrentResume",
+  addResume: "addResume",
+  getOwnerResumes: "getOwnerResumes",
 };
 
 export const OneBigNumber = BigNumber.from("1");

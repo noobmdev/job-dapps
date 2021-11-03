@@ -38,6 +38,8 @@ const Candidate = () => {
 
   const [refresh, setRefresh] = useState(true); // TODO change trigger refresh data
   const [candidateProfile, setCandidateProfile] = useState();
+  const [currentProfileUrl, setCurrentProfileUrl] = useState();
+  const [creatingResume, setCreatingResume] = useState(false);
 
   useEffect(() => {
     async function getRecruiterProfile() {
@@ -48,15 +50,20 @@ const Candidate = () => {
             JOB_CORE_METHODS.getCurrentResume,
             []
           );
-          console.log(resume.url);
           if (resume.url) {
+            setCurrentProfileUrl(resume.url);
             fetch(resume.url)
               .then((res) => res.json())
               .then((out) => setCandidateProfile(out))
               .catch((err) => console.error(err));
           }
-          // setCandidateProfile((pre) => ({ ...pre, ..._recruiter }));
         }
+
+        await callContract(
+          jobCoreContract,
+          JOB_CORE_METHODS.getOwnerResumes,
+          []
+        ).then(console.log);
       } catch (error) {
         console.error(error);
       }
@@ -91,24 +98,35 @@ const Candidate = () => {
     }
   };
 
+  const handleCreateResume = async (payload, infoType) => {
+    try {
+      if (!currentProfileUrl || !candidateProfile) {
+        return alert("Please update current profile");
+      }
+      setCreatingResume(true);
+      const path = await uploadIPFS(candidateProfile);
+      if (path && jobCoreContract) {
+        await callContract(jobCoreContract, JOB_CORE_METHODS.addResume, [path]);
+        setCreatingResume(false);
+        return;
+      }
+    } catch (error) {
+      setCreatingResume(false);
+      console.error(error);
+    }
+  };
+
   return (
     <CandidateLayout>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>{/* <Lorem count={2} /> */}</ModalBody>
-
-          <ModalFooter>
-            <Button colorSc>Secondary Action</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
       <VStack align="stretch" spacing="4">
         <Box>
-          <Button colorScheme="teal">Create resume</Button>
+          <Button
+            colorScheme="teal"
+            onClick={handleCreateResume}
+            isLoading={creatingResume}
+          >
+            Create resume
+          </Button>
         </Box>
 
         <PersonalInformation
