@@ -186,7 +186,7 @@ contract JobCore is Ownable {
         address[8] memory recruiterAddresses = [
             0xe9dd3CC74B6d57E8B27D4bF6cA96ffAeBEF4205e,
             0x78033C72581fDc5593b8120760C70018eD42AA69,
-            0x78033C72581fDc5593b8120760C70018eD42AA69,
+            0x4Acf773BD581BdF5De5F9E6fc06589C3F6C791F9,
             0x78033C72581fDc5593b8120760C70018eD42AA69,
             0x78033C72581fDc5593b8120760C70018eD42AA69,
             0x78033C72581fDc5593b8120760C70018eD42AA69,
@@ -226,19 +226,19 @@ contract JobCore is Ownable {
     
     modifier isValidRecruiterId(uint256 _recruiter) {
          uint256 _latestRecruiterId = latestRecruiterId.current();
-        require(_recruiter == 0 || _recruiter >= _latestRecruiterId, "RECRUITER: INVALID_ID");
+        require(_recruiter > 0 || _recruiter <= _latestRecruiterId, "RECRUITER: INVALID_ID");
         _;
     }
     
     modifier isValidJobId(uint256 _jobId) {
          uint256 _latestJobId = latestJobId.current();
-        require(_jobId == 0 || _jobId >= _latestJobId, "JOB: INVALID_ID");
+        require(_jobId > 0 || _jobId <= _latestJobId, "JOB: INVALID_ID");
         _;
     }
     
     modifier isValidResumeId(uint256 _resume) {
          uint256 _latestResumeId = latestResumeId.current();
-        require(_resume == 0 || _resume >= _latestResumeId, "RESUME: INVALID_ID");
+        require(_resume > 0 || _resume <= _latestResumeId, "RESUME: INVALID_ID");
         _;
     }
     
