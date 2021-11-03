@@ -67,6 +67,7 @@ const Candidate = () => {
           }
         }
       } catch (error) {
+        setIsLoading(false);
         console.error(error);
       }
     }
