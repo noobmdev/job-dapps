@@ -37,7 +37,7 @@ const Candidate = () => {
   const { account } = useActiveWeb3React();
   const jobCoreContract = useJobCoreContract();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(true); // TODO change trigger refresh data
   const [candidateProfile, setCandidateProfile] = useState();
   const [currentProfileUrl, setCurrentProfileUrl] = useState();
@@ -58,16 +58,16 @@ const Candidate = () => {
               .then((res) => res.json())
               .then((out) => {
                 setCandidateProfile(out);
-                setIsLoading(false);
+                //setIsLoading(false);
               })
               .catch((err) => {
-                setIsLoading(false);
+                //setIsLoading(false);
                 console.error(err);
               });
           }
         }
       } catch (error) {
-        setIsLoading(false);
+        //setIsLoading(false);
         console.error(error);
       }
     }
