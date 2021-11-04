@@ -135,9 +135,10 @@ contract JobCore is Ownable {
         uint256 salaryMax;
         string location;
         string experience;
-        string descriptions;
-        string benefits;
-        string requirements;
+        string[] skills;
+        string[] descriptions;
+        string[] benefits;
+        string[] requirements;
         uint256 expiredIn; 
     }
     
@@ -285,10 +286,12 @@ contract JobCore is Ownable {
         uint256 _salaryMax, 
         string memory _location,
         string memory _experience,
-        string memory _descriptions,  
-        string memory _benefits, 
-        string memory _requirements
+        string[] memory _skills,
+        string[] memory _descriptions,  
+        string[] memory _benefits, 
+        string[] memory _requirements
     ) public onlyRecuiter returns(uint256) {
+        require(_salaryMin < _salaryMax, "JOB: INVALID_RANGE_SALARY");
         latestJobId.increment();
         uint256 _latestJobId = latestJobId.current();
         
@@ -299,6 +302,7 @@ contract JobCore is Ownable {
            salaryMax: _salaryMax,
            location: _location,
            experience: _experience,
+           skills: _skills,
            descriptions: _descriptions,
            benefits: _benefits,
            requirements: _requirements,
@@ -338,6 +342,25 @@ contract JobCore is Ownable {
         uint256 count = 0;
         for(uint256 i = _latestJobId; i > 0; i--) {
             _jobs[count] =  jobs[i];
+            count++;
+        }
+        return _jobs;
+    }
+    
+    function getJobs(uint256 first, uint256 skip) view public returns(Job[] memory) {
+        uint256 _latestJobId = latestJobId.current();
+        if(skip >= _latestJobId) {
+            return new Job[](0);
+        }
+        uint256 rest = _latestJobId - skip;
+        uint256 _first = first;
+        if(rest < first) {
+            _first = rest;
+        }
+        Job[] memory _jobs = new Job[](_first);
+        uint256 count = 0;
+        for(uint256 i = 1; i <= _first; i++) {
+            _jobs[count] = jobs[skip + i];
             count++;
         }
         return _jobs;
