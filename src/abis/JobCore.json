@@ -1,5 +1,10 @@
 [
   {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -51,19 +56,19 @@
         "type": "string[]"
       },
       {
-        "internalType": "string[]",
+        "internalType": "string",
         "name": "_descriptions",
-        "type": "string[]"
+        "type": "string"
       },
       {
-        "internalType": "string[]",
+        "internalType": "string",
         "name": "_benefits",
-        "type": "string[]"
+        "type": "string"
       },
       {
-        "internalType": "string[]",
+        "internalType": "string",
         "name": "_requirements",
-        "type": "string[]"
+        "type": "string"
       }
     ],
     "name": "addJob",
@@ -153,62 +158,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_jobId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_resumeId",
-        "type": "uint256"
-      }
-    ],
-    "name": "applyJob",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "renounceOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_url",
-        "type": "string"
-      }
-    ],
-    "name": "updateCurrentResume",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "",
         "type": "address"
@@ -252,6 +201,24 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_jobId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_resumeId",
+        "type": "uint256"
+      }
+    ],
+    "name": "applyJob",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -383,19 +350,19 @@
             "type": "string[]"
           },
           {
-            "internalType": "string[]",
+            "internalType": "string",
             "name": "descriptions",
-            "type": "string[]"
+            "type": "string"
           },
           {
-            "internalType": "string[]",
+            "internalType": "string",
             "name": "benefits",
-            "type": "string[]"
+            "type": "string"
           },
           {
-            "internalType": "string[]",
+            "internalType": "string",
             "name": "requirements",
-            "type": "string[]"
+            "type": "string"
           },
           {
             "internalType": "uint256",
@@ -453,19 +420,19 @@
             "type": "string[]"
           },
           {
-            "internalType": "string[]",
+            "internalType": "string",
             "name": "descriptions",
-            "type": "string[]"
+            "type": "string"
           },
           {
-            "internalType": "string[]",
+            "internalType": "string",
             "name": "benefits",
-            "type": "string[]"
+            "type": "string"
           },
           {
-            "internalType": "string[]",
+            "internalType": "string",
             "name": "requirements",
-            "type": "string[]"
+            "type": "string"
           },
           {
             "internalType": "uint256",
@@ -534,19 +501,19 @@
             "type": "string[]"
           },
           {
-            "internalType": "string[]",
+            "internalType": "string",
             "name": "descriptions",
-            "type": "string[]"
+            "type": "string"
           },
           {
-            "internalType": "string[]",
+            "internalType": "string",
             "name": "benefits",
-            "type": "string[]"
+            "type": "string"
           },
           {
-            "internalType": "string[]",
+            "internalType": "string",
             "name": "requirements",
-            "type": "string[]"
+            "type": "string"
           },
           {
             "internalType": "uint256",
@@ -630,19 +597,19 @@
             "type": "string[]"
           },
           {
-            "internalType": "string[]",
+            "internalType": "string",
             "name": "descriptions",
-            "type": "string[]"
+            "type": "string"
           },
           {
-            "internalType": "string[]",
+            "internalType": "string",
             "name": "benefits",
-            "type": "string[]"
+            "type": "string"
           },
           {
-            "internalType": "string[]",
+            "internalType": "string",
             "name": "requirements",
-            "type": "string[]"
+            "type": "string"
           },
           {
             "internalType": "uint256",
@@ -817,6 +784,21 @@
         "type": "string"
       },
       {
+        "internalType": "string",
+        "name": "descriptions",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "benefits",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "requirements",
+        "type": "string"
+      },
+      {
         "internalType": "uint256",
         "name": "expiredIn",
         "type": "uint256"
@@ -852,6 +834,25 @@
       }
     ],
     "name": "ownerJobs",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "recruiterToId",
     "outputs": [
       {
         "internalType": "uint256",
@@ -917,22 +918,10 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "recruiterToId",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -971,6 +960,32 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_url",
+        "type": "string"
+      }
+    ],
+    "name": "updateCurrentResume",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

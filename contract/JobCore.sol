@@ -136,9 +136,9 @@ contract JobCore is Ownable {
         string location;
         string experience;
         string[] skills;
-        string[] descriptions;
-        string[] benefits;
-        string[] requirements;
+        string descriptions;
+        string benefits;
+        string requirements;
         uint256 expiredIn; 
     }
     
@@ -287,9 +287,9 @@ contract JobCore is Ownable {
         string memory _location,
         string memory _experience,
         string[] memory _skills,
-        string[] memory _descriptions,  
-        string[] memory _benefits, 
-        string[] memory _requirements
+        string memory _descriptions,  
+        string memory _benefits, 
+        string memory _requirements
     ) public onlyRecuiter returns(uint256) {
         require(_salaryMin < _salaryMax, "JOB: INVALID_RANGE_SALARY");
         latestJobId.increment();

@@ -57,10 +57,25 @@ const JobsManagement = () => {
     salaryMax: 10,
     location: LOCATIONS.ALL,
     experience: EXPERIENCES[0],
+    skills: [],
     descriptions: "",
     benefits: "",
     requirements: "",
   });
+
+  useEffect(() => {
+    setJobInfo({
+      title: "",
+      salaryMin: 10,
+      salaryMax: 50,
+      location: LOCATIONS.ALL,
+      experience: EXPERIENCES[0],
+      skills: [],
+      descriptions: "",
+      benefits: "",
+      requirements: "",
+    });
+  }, [isOpen]);
 
   useEffect(() => {
     if (jobCoreContract) {
@@ -105,15 +120,28 @@ const JobsManagement = () => {
     }
   }, [jobCoreContract, refresh]);
 
-  const handleCreateNewJob = () => {
-    setSubmitting(true);
-    callContract(jobCoreContract, JOB_CORE_METHODS.addJob, [
-      ...Object.values(jobInfo),
-    ]).then(() => {
+  const handleCreateNewJob = async () => {
+    try {
+      setSubmitting(true);
+
+      await callContract(jobCoreContract, JOB_CORE_METHODS.addJob, [
+        jobInfo.title,
+        jobInfo.salaryMin,
+        jobInfo.salaryMax,
+        jobInfo.location,
+        jobInfo.experience,
+        jobInfo.skills,
+        jobInfo.descriptions,
+        jobInfo.benefits,
+        jobInfo.requirements,
+      ]);
       setRefresh((pre) => !pre);
       setSubmitting(false);
-      onClose();
-    }); // TODO change to refresh
+      onClose(); // TODO change to refresh
+    } catch (error) {
+      console.error(error);
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -139,7 +167,14 @@ const JobsManagement = () => {
               <HStack>
                 <FormControl isRequired>
                   <FormLabel>Salary Min</FormLabel>
-                  <NumberInput value={jobInfo.salaryMin} min={10} step={10}>
+                  <NumberInput
+                    value={jobInfo.salaryMin}
+                    onChange={(v) =>
+                      setJobInfo((job) => ({ ...job, salaryMin: v }))
+                    }
+                    min={10}
+                    step={10}
+                  >
                     <NumberInputField />
                     <NumberInputStepper>
                       <NumberIncrementStepper />
@@ -149,7 +184,14 @@ const JobsManagement = () => {
                 </FormControl>
                 <FormControl isRequired>
                   <FormLabel>Salary Max</FormLabel>
-                  <NumberInput value={jobInfo.salaryMax} min={10} step={10}>
+                  <NumberInput
+                    value={jobInfo.salaryMax}
+                    onChange={(v) =>
+                      setJobInfo((job) => ({ ...job, salaryMax: v }))
+                    }
+                    min={50}
+                    step={10}
+                  >
                     <NumberInputField />
                     <NumberInputStepper>
                       <NumberIncrementStepper />
@@ -177,7 +219,13 @@ const JobsManagement = () => {
 
               <FormControl isRequired>
                 <FormLabel>Skills</FormLabel>
-                <CheckboxGroup colorScheme="green">
+                <CheckboxGroup
+                  colorScheme="green"
+                  value={jobInfo.skills}
+                  onChange={(v) =>
+                    setJobInfo((job) => ({ ...job, skills: [...v] }))
+                  }
+                >
                   <Grid templateColumns="repeat(3, 1fr)" gap="2">
                     {Object.values(SKILLS).map((s) => (
                       <Checkbox value={s}>{s}</Checkbox>

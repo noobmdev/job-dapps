@@ -14,9 +14,11 @@ import {
 } from "@chakra-ui/modal";
 import { Select } from "@chakra-ui/select";
 import { Spinner } from "@chakra-ui/spinner";
+import ReactToPrint from "react-to-print";
+import ResumePDF from "components/ResumePDF";
 import { JOB_CORE_METHODS } from "configs";
 import { callContract, useJobCoreContract } from "hooks/useContract";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { CgWebsite } from "react-icons/cg";
 import { ImHourGlass } from "react-icons/im";
 import { IoIosPeople } from "react-icons/io";
@@ -33,6 +35,9 @@ const JobDetail = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const jobCoreContract = useJobCoreContract();
   const { id: jobId } = useParams();
+
+  const resumeRef = useRef();
+  const clickRef = useRef();
 
   const [job, setJob] = useState();
   const [resumes, setResumes] = useState([]);
@@ -103,8 +108,47 @@ const JobDetail = () => {
     }
   };
 
+  const displayLineBreak = (text) => {
+    return text.split("\n").map((str) => <p>{str}</p>);
+  };
+
+  const [selectedResume, setSelectedResume] = useState();
+
+  const handleChangeSelectedResume = (selectedResumeId) => {
+    setSelectedResumeId(selectedResumeId);
+    const resume = resumes.find((r) => r.id?.toString() === selectedResumeId);
+    fetch(resume.url)
+      .then((res) => res.json())
+      .then((out) => {
+        setSelectedResume(out);
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("ERROR");
+      });
+  };
+
+  const downloadResumePDF = () => {
+    clickRef.current.click();
+  };
+
   return (
     <Box px="32">
+      <ReactToPrint
+        trigger={() => (
+          <button
+            ref={clickRef}
+            style={{
+              padding: "1em 0.5em",
+              color: "#333",
+              textDecoration: "underline",
+              cursor: "pointer",
+            }}
+          ></button>
+        )}
+        content={() => resumeRef.current}
+      />
+      <ResumePDF resume={selectedResume} ref={resumeRef} />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -114,7 +158,7 @@ const JobDetail = () => {
             <Select
               placeholder="Choose your CV"
               value={selectedResumeId}
-              onChange={(e) => setSelectedResumeId(e.target.value)}
+              onChange={(e) => handleChangeSelectedResume(e.target.value)}
             >
               {resumes.map((resume, idx) => (
                 <option key={idx} value={resume.id}>
@@ -128,6 +172,7 @@ const JobDetail = () => {
                 textDecor="underline"
                 cursor="pointer"
                 color="teal.600"
+                onClick={() => downloadResumePDF(selectedResumeId)}
               >
                 Download resume {selectedResumeId?.toString()}
               </Box>
@@ -196,21 +241,29 @@ const JobDetail = () => {
             <VStack align="stretch" spacing="4">
               <Box>
                 <Box fontSize="xl" fontWeight="semibold">
+                  Skills
+                </Box>
+                {job.skills.map((s) => (
+                  <Box>- {s}</Box>
+                ))}
+              </Box>
+              <Box>
+                <Box fontSize="xl" fontWeight="semibold">
                   Description
                 </Box>
-                <Box>{job.descriptions}</Box>
+                <Box>{displayLineBreak(job.descriptions)}</Box>
               </Box>
               <Box>
                 <Box fontSize="xl" fontWeight="semibold">
                   Benefits
                 </Box>
-                <Box>{job.benefits}</Box>
+                <Box>{displayLineBreak(job.benefits)}</Box>
               </Box>
               <Box>
                 <Box fontSize="xl" fontWeight="semibold">
                   Requirements
                 </Box>
-                <Box>{job.requirements}</Box>
+                <Box>{displayLineBreak(job.requirements)}</Box>
               </Box>
             </VStack>
           </VStack>

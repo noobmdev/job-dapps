@@ -22,6 +22,10 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalItem, setTotalItem] = useState(0);
+  const [searchQuery, setSearchQuery] = useState({
+    query: "",
+    location: "",
+  });
 
   // console.count("counter");
 
@@ -34,7 +38,6 @@ const Home = () => {
           []
         ).then((latestRecruiterId) => {
           setLatestRecruiterId(latestRecruiterId);
-          setTotalItem(latestRecruiterId.toString());
         });
       }
     }
@@ -73,12 +76,14 @@ const Home = () => {
             );
 
             setJobs(_jobs);
+            setTotalItem(_jobs.length);
           }
         );
       }
     }
     getJobs();
   }, [jobCoreContract, currentPage, perPage]);
+  console.log(searchQuery);
 
   useEffect(() => {
     async function getRecruiters() {
@@ -111,11 +116,28 @@ const Home = () => {
             pointerEvents="none"
             children={<Icon as={MdSearch} color="white" />}
           />
-          <Input type="text" placeholder="Skills or positions" />
+          <Input
+            type="text"
+            placeholder="Skills"
+            value={searchQuery.query}
+            onChange={(e) =>
+              setSearchQuery((search) => ({ ...search, query: e.target.value }))
+            }
+          />
         </InputGroup>
         <HStack minW="12em" pos="relative">
           {/* <Input type="text" placeholder="Locations" /> */}
-          <Select color="white" variant="outline" defaultValue="">
+          <Select
+            color="white"
+            variant="outline"
+            value={searchQuery.location}
+            onChange={(e) =>
+              setSearchQuery((search) => ({
+                ...search,
+                location: e.target.value,
+              }))
+            }
+          >
             <option value="" style={{ display: "none" }}>
               Locations
             </option>
@@ -126,24 +148,36 @@ const Home = () => {
             ))}
           </Select>
         </HStack>
-        <Button px="8" colorScheme="teal">
+        {/* <Button px="8" colorScheme="teal">
           Search
-        </Button>
+        </Button> */}
       </HStack>
 
       <Box fontWeight="semibold" fontSize="3xl" textAlign="center" pb="4">
         Suitable Jobs
       </Box>
       <Grid templateColumns="repeat(2, 1fr)" gap="8">
-        {jobs.map((job, idx) => (
-          <Job job={job} key={idx} />
-        ))}
+        {jobs
+          .filter((job) => {
+            console.log(
+              job.descriptions,
+              new RegExp(searchQuery.query, "gi").test(job.descriptions)
+            );
+            return (
+              job.location?.includes(searchQuery.location) &&
+              new RegExp(searchQuery.query, "gi").test(job.skills?.join(""))
+            );
+          })
+          .slice((currentPage - 1) * perPage, currentPage * perPage)
+          .map((job, idx) => (
+            <Job job={job} key={idx} />
+          ))}
       </Grid>
 
       {/* Pagging */}
       {totalItem != 0 && (
         <HStack align="center" justify="center" my="8" spacing="4">
-          {new Array(+totalItem).fill("").map((e, idx) => (
+          {new Array(Math.ceil(totalItem / perPage)).fill("").map((e, idx) => (
             <Box
               key={idx}
               px="4"
@@ -151,11 +185,13 @@ const Home = () => {
               border="1px solid"
               borderColor="white"
               cursor="pointer"
+              onClick={() => setCurrentPage(idx + 1)}
+              bg={currentPage === idx + 1 ? "teal.400" : ""}
             >
               {idx + 1}
             </Box>
           ))}
-          <Box
+          {/* <Box
             px="4"
             py="2"
             border="1px solid"
@@ -163,7 +199,7 @@ const Home = () => {
             cursor="pointer"
           >
             &gt;
-          </Box>
+          </Box> */}
         </HStack>
       )}
 

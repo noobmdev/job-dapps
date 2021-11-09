@@ -25,10 +25,12 @@ const PersonalInformation = ({ candidateProfile, updateHandler, infoType }) => {
   });
 
   useEffect(() => {
-    if (candidateProfile?.[infoType]) {
-      setPersonalInfo(candidateProfile?.[infoType]);
+    if (candidateProfile?.[infoType]?.length) {
+      setPersonalInfo(candidateProfile?.[infoType][0]);
     }
   }, [candidateProfile]);
+
+  console.log(personalInfo);
 
   return (
     <Box p="6" border="1px solid" borderColor="gray.300" borderRadius="md">
