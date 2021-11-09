@@ -21,8 +21,9 @@ const Home = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
+  const [totalItem, setTotalItem] = useState(0);
 
-  console.count("counter");
+  // console.count("counter");
 
   useEffect(() => {
     async function getLatestRecruiterId() {
@@ -31,7 +32,10 @@ const Home = () => {
           jobCoreContract,
           JOB_CORE_METHODS.getLatestRecruiterId,
           []
-        ).then((latestRecruiterId) => setLatestRecruiterId(latestRecruiterId));
+        ).then((latestRecruiterId) => {
+          setLatestRecruiterId(latestRecruiterId);
+          setTotalItem(latestRecruiterId.toString());
+        });
       }
     }
     getLatestRecruiterId();
@@ -100,23 +104,23 @@ const Home = () => {
   }, [latestRecruiterId]);
 
   return (
-    <Box>
+    <Box color="white">
       <HStack px="40" py="4" spacing="4">
         <InputGroup>
           <InputLeftElement
             pointerEvents="none"
-            children={<Icon as={MdSearch} color="gray.500" />}
+            children={<Icon as={MdSearch} color="white" />}
           />
           <Input type="text" placeholder="Skills or positions" />
         </InputGroup>
         <HStack minW="12em" pos="relative">
           {/* <Input type="text" placeholder="Locations" /> */}
-          <Select color="gray.500" variant="outline" defaultValue="">
+          <Select color="white" variant="outline" defaultValue="">
             <option value="" style={{ display: "none" }}>
               Locations
             </option>
             {Object.values(LOCATIONS).map((l) => (
-              <option key={l} value={l}>
+              <option style={{ color: "black" }} key={l} value={l}>
                 {l}
               </option>
             ))}
@@ -137,29 +141,31 @@ const Home = () => {
       </Grid>
 
       {/* Pagging */}
-      {/* <HStack align="center" justify="center" my="8" spacing="4">
-        {new Array(4).fill("").map((e, idx) => (
+      {totalItem != 0 && (
+        <HStack align="center" justify="center" my="8" spacing="4">
+          {new Array(+totalItem).fill("").map((e, idx) => (
+            <Box
+              key={idx}
+              px="4"
+              py="2"
+              border="1px solid"
+              borderColor="white"
+              cursor="pointer"
+            >
+              {idx + 1}
+            </Box>
+          ))}
           <Box
-            key={idx}
             px="4"
             py="2"
             border="1px solid"
-            borderColor="#ff523b"
+            borderColor="white"
             cursor="pointer"
           >
-            {idx + 1}
+            &gt;
           </Box>
-        ))}
-        <Box
-          px="4"
-          py="2"
-          border="1px solid"
-          borderColor="#ff523b"
-          cursor="pointer"
-        >
-          &gt;
-        </Box>
-      </HStack> */}
+        </HStack>
+      )}
 
       {/* Recuiters */}
       <Box fontWeight="semibold" fontSize="3xl" textAlign="center" p="4">

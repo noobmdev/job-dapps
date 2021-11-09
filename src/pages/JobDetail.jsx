@@ -170,7 +170,7 @@ const JobDetail = () => {
                   Apply Job
                 </Button>
               </HStack>
-              <Grid templateColumns="repeat(4, 1fr)" color="gray.500">
+              <Grid templateColumns="repeat(4, 1fr)" color="whiteAlpha.800">
                 <HStack>
                   <Icon as={MdLocationOn} />
                   <Box>{job.location}</Box>

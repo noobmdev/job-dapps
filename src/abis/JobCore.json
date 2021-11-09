@@ -46,19 +46,24 @@
         "type": "string"
       },
       {
-        "internalType": "string",
+        "internalType": "string[]",
+        "name": "_skills",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
         "name": "_descriptions",
-        "type": "string"
+        "type": "string[]"
       },
       {
-        "internalType": "string",
+        "internalType": "string[]",
         "name": "_benefits",
-        "type": "string"
+        "type": "string[]"
       },
       {
-        "internalType": "string",
+        "internalType": "string[]",
         "name": "_requirements",
-        "type": "string"
+        "type": "string[]"
       }
     ],
     "name": "addJob",
@@ -373,19 +378,24 @@
             "type": "string"
           },
           {
-            "internalType": "string",
+            "internalType": "string[]",
+            "name": "skills",
+            "type": "string[]"
+          },
+          {
+            "internalType": "string[]",
             "name": "descriptions",
-            "type": "string"
+            "type": "string[]"
           },
           {
-            "internalType": "string",
+            "internalType": "string[]",
             "name": "benefits",
-            "type": "string"
+            "type": "string[]"
           },
           {
-            "internalType": "string",
+            "internalType": "string[]",
             "name": "requirements",
-            "type": "string"
+            "type": "string[]"
           },
           {
             "internalType": "uint256",
@@ -438,19 +448,105 @@
             "type": "string"
           },
           {
-            "internalType": "string",
+            "internalType": "string[]",
+            "name": "skills",
+            "type": "string[]"
+          },
+          {
+            "internalType": "string[]",
             "name": "descriptions",
-            "type": "string"
+            "type": "string[]"
           },
           {
-            "internalType": "string",
+            "internalType": "string[]",
             "name": "benefits",
+            "type": "string[]"
+          },
+          {
+            "internalType": "string[]",
+            "name": "requirements",
+            "type": "string[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "expiredIn",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct JobCore.Job[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "first",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "skip",
+        "type": "uint256"
+      }
+    ],
+    "name": "getJobs",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "salaryMin",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "salaryMax",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "location",
             "type": "string"
           },
           {
             "internalType": "string",
-            "name": "requirements",
+            "name": "experience",
             "type": "string"
+          },
+          {
+            "internalType": "string[]",
+            "name": "skills",
+            "type": "string[]"
+          },
+          {
+            "internalType": "string[]",
+            "name": "descriptions",
+            "type": "string[]"
+          },
+          {
+            "internalType": "string[]",
+            "name": "benefits",
+            "type": "string[]"
+          },
+          {
+            "internalType": "string[]",
+            "name": "requirements",
+            "type": "string[]"
           },
           {
             "internalType": "uint256",
@@ -529,19 +625,24 @@
             "type": "string"
           },
           {
-            "internalType": "string",
+            "internalType": "string[]",
+            "name": "skills",
+            "type": "string[]"
+          },
+          {
+            "internalType": "string[]",
             "name": "descriptions",
-            "type": "string"
+            "type": "string[]"
           },
           {
-            "internalType": "string",
+            "internalType": "string[]",
             "name": "benefits",
-            "type": "string"
+            "type": "string[]"
           },
           {
-            "internalType": "string",
+            "internalType": "string[]",
             "name": "requirements",
-            "type": "string"
+            "type": "string[]"
           },
           {
             "internalType": "uint256",
@@ -713,21 +814,6 @@
       {
         "internalType": "string",
         "name": "experience",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "descriptions",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "benefits",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "requirements",
         "type": "string"
       },
       {

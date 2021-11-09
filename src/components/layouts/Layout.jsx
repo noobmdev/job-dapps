@@ -19,6 +19,7 @@ import { useWallet } from "connectors/hooks";
 import { useActiveWeb3React } from "hooks/useActiveWeb3React";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import "styles/Layout.css";
 
 export const Layout = ({ children }) => {
   const { account, isConnected, library } = useActiveWeb3React();
@@ -40,13 +41,22 @@ export const Layout = ({ children }) => {
   }, [isConnected]);
 
   return (
-    <Box minH="100vh">
-      <Modal
-        isCentered
-        size="sm"
-        isOpen={isOpen && !isConnected}
-        onClose={onClose}
-      >
+    <Box minH="100vh" color="white">
+      <div className="area">
+        <ul className="circles">
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+        </ul>
+      </div>
+      <Modal size="sm" isOpen={isOpen && !isConnected} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Connect Wallet</ModalHeader>
@@ -122,7 +132,7 @@ export const Layout = ({ children }) => {
         {children}
       </Box>
 
-      <Box textAlign="center" p="4">
+      <Box textAlign="center" p="4" style={{ color: "white" }}>
         © {new Date().getFullYear()} Copyright
       </Box>
     </Box>

@@ -118,7 +118,7 @@ const JobsManagement = () => {
 
   return (
     <RecruiterLayout>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered size="xl">
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Create new job</ModalHeader>

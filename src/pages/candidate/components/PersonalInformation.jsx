@@ -103,7 +103,14 @@ const PersonalInformation = ({ candidateProfile, updateHandler, infoType }) => {
             isDisabled={!canEdit}
           >
             {new Array(50).fill(new Date().getFullYear()).map((item, idx) => (
-              <option>{item - idx}</option>
+              <option
+                style={{
+                  color: "black",
+                }}
+                key={idx}
+              >
+                {item - idx}
+              </option>
             ))}
           </Select>
         </GridItem>

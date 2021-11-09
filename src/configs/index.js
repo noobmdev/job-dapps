@@ -1,12 +1,13 @@
 const { BigNumber } = require("@ethersproject/bignumber");
 
-export const JOB_CORE_ADDRESS = "0xE7E1c9c0AE946C72deDA3354009582aE81013F43";
+export const JOB_CORE_ADDRESS = "0xAfE1f2Cb8d2beF12FE39A47ccd6C096cfC6B54ed";
 
 export const JOB_CORE_METHODS = {
   getLatestRecruiterId: "getLatestRecruiterId",
   recruiters: "recruiters",
   getJob: "getJob",
-  getJobs: "getJobs",
+  getJobs: "getJobs()",
+  getJobsPaging: "getJobs(uint256,uint256)",
   jobOwner: "jobOwner",
   recruiterToId: "recruiterToId",
   addJob: "addJob",
@@ -40,4 +41,23 @@ export const SKILLS = {
   DATABASE: "Database",
   GIT: "Git",
   OTHER: "Other",
+};
+
+export const CANDIDATE_MODAL_TITLE = {
+  ADD_EDUCATION: "Add Education",
+  ADD_EXPERIENCE: "Add Experience",
+  ADD_SKILL: "Add Skill",
+  ADD_PROJECT: "Add Project",
+  ADD_CERTIFICATE: "Add Certificate",
+  ADD_PRIZE: "Add Prize",
+};
+
+export const CANDIDATE_INFO_TYPE = {
+  PERSONAL_INFO: "personalInfo",
+  EDUCATION: "education",
+  EXPERIENCES: "experiences",
+  SKILLS: "skills",
+  CERTIFICATES: "certificates",
+  PROJECTS: "projects",
+  PRIZES: "prizes",
 };
