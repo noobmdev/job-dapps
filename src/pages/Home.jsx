@@ -117,7 +117,7 @@ const Home = () => {
       </Grid>
 
       {/* Pagging */}
-      {totalItem != 0 && (
+      {totalItem != 0 && !!jobs.length && (
         <HStack align="center" justify="center" my="8" spacing="4">
           {new Array(Math.ceil(totalItem / perPage)).fill("").map((e, idx) => (
             <Box
@@ -133,15 +133,6 @@ const Home = () => {
               {idx + 1}
             </Box>
           ))}
-          {/* <Box
-            px="4"
-            py="2"
-            border="1px solid"
-            borderColor="white"
-            cursor="pointer"
-          >
-            &gt;
-          </Box> */}
         </HStack>
       )}
 
