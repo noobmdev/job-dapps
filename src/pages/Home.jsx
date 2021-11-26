@@ -6,12 +6,20 @@ import { Box, Grid, HStack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
 import Job from "components/Job";
 import { JOB_CORE_METHODS, LOCATIONS } from "configs";
+import { useActiveWeb3React } from "hooks/useActiveWeb3React";
 import { callContract, useJobCoreContract } from "hooks/useContract";
 import React, { useEffect, useState } from "react";
 import { MdSearch } from "react-icons/md";
 import { removeNumericKey } from "utils";
+import {
+  getJobs,
+  getLatestJobId,
+  getLatestRecruiterId,
+  getRecruiters,
+} from "utils/callContract";
 
 const Home = () => {
+  const { library } = useActiveWeb3React();
   const jobCoreContract = useJobCoreContract();
 
   const [latestRecruiterId, setLatestRecruiterId] = useState();
@@ -27,86 +35,24 @@ const Home = () => {
     location: "",
   });
 
-  // console.count("counter");
+  useEffect(() => {
+    if (library) {
+      getLatestRecruiterId(library).then(setLatestRecruiterId);
+      getLatestJobId(library).then(setTotalItem);
+    }
+  }, [library]);
 
   useEffect(() => {
-    async function getLatestRecruiterId() {
-      if (jobCoreContract) {
-        callContract(
-          jobCoreContract,
-          JOB_CORE_METHODS.getLatestRecruiterId,
-          []
-        ).then((latestRecruiterId) => {
-          setLatestRecruiterId(latestRecruiterId);
-        });
-      }
+    if (library) {
+      getJobs(library, perPage, (currentPage - 1) * perPage).then(setJobs);
     }
-    getLatestRecruiterId();
-  }, [jobCoreContract]);
+  }, [library, currentPage, perPage]);
 
   useEffect(() => {
-    async function getJobs() {
-      if (jobCoreContract) {
-        callContract(jobCoreContract, JOB_CORE_METHODS.getJobs, []).then(
-          async (jobs) => {
-            const _jobs = await Promise.all(
-              jobs.map(async (e) => {
-                const job = removeNumericKey(e);
-
-                const recruiterAddress = await callContract(
-                  jobCoreContract,
-                  JOB_CORE_METHODS.jobOwner,
-                  [job.id]
-                );
-                const recruiterId = await callContract(
-                  jobCoreContract,
-                  JOB_CORE_METHODS.recruiterToId,
-                  [recruiterAddress]
-                );
-                const recruiter = await callContract(
-                  jobCoreContract,
-                  JOB_CORE_METHODS.recruiters,
-                  [recruiterId]
-                );
-
-                const _recruiter = removeNumericKey(recruiter);
-
-                return { ...job, recruiter: _recruiter };
-              })
-            );
-
-            setJobs(_jobs);
-            setTotalItem(_jobs.length);
-          }
-        );
-      }
+    if (library && latestRecruiterId) {
+      getRecruiters(library, latestRecruiterId).then(setRecruiters);
     }
-    getJobs();
-  }, [jobCoreContract, currentPage, perPage]);
-  console.log(searchQuery);
-
-  useEffect(() => {
-    async function getRecruiters() {
-      if (latestRecruiterId) {
-        const recruiterLength = +latestRecruiterId.toString();
-        const recruiters = await Promise.all(
-          new Array(recruiterLength).fill("").map(async (_, idx) => {
-            const recruiter = await callContract(
-              jobCoreContract,
-              JOB_CORE_METHODS.recruiters,
-              [idx + 1]
-            );
-            const _recruiter = removeNumericKey(recruiter);
-            return _recruiter;
-          })
-        );
-        if (recruiters?.length) {
-          setRecruiters(recruiters);
-        }
-      }
-    }
-    getRecruiters();
-  }, [latestRecruiterId]);
+  }, [library, latestRecruiterId]);
 
   return (
     <Box color="white">
@@ -159,10 +105,6 @@ const Home = () => {
       <Grid templateColumns="repeat(2, 1fr)" gap="8">
         {jobs
           .filter((job) => {
-            console.log(
-              job.descriptions,
-              new RegExp(searchQuery.query, "gi").test(job.descriptions)
-            );
             return (
               job.location?.includes(searchQuery.location) &&
               new RegExp(searchQuery.query, "gi").test(job.skills?.join(""))

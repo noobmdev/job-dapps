@@ -4,6 +4,7 @@ import { useWeb3React } from "@web3-react/core";
 import { useMemo } from "react";
 import { JOB_CORE_ADDRESS } from "configs";
 import JobCoreABI from "abis/JobCore.json";
+import { useActiveWeb3React } from "./useActiveWeb3React";
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value) {
@@ -33,12 +34,14 @@ export function getContract(address, ABI, library, account = undefined) {
     throw Error(`Invalid 'address' parameter '${address}'.`);
   }
 
+  if (!library) return new Error("No provider or signer");
+
   return new Contract(address, ABI, getProviderOrSigner(library, account));
 }
 
 // returns null on errors
 export function useContract(address, ABI, withSignerIfPossible = true) {
-  const { library, account } = useWeb3React();
+  const { library, account } = useActiveWeb3React();
 
   return useMemo(() => {
     if (!address || !ABI || !library) return null;
@@ -55,6 +58,7 @@ export function useContract(address, ABI, withSignerIfPossible = true) {
     }
   }, [address, ABI, library, withSignerIfPossible, account]);
 }
+
 export async function callContract(contract, method, args, overrides = {}) {
   // const callstatic = await contract.callStatic[method](
   //   ...args,
@@ -80,4 +84,8 @@ export async function callContract(contract, method, args, overrides = {}) {
 
 export function useJobCoreContract() {
   return useContract(JOB_CORE_ADDRESS, JobCoreABI);
+}
+
+export function getJobCoreContract(library, account = undefined) {
+  return getContract(JOB_CORE_ADDRESS, JobCoreABI, library, account);
 }

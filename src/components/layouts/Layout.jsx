@@ -14,7 +14,7 @@ import { formatEther } from "@ethersproject/units";
 import Logo from "assets/images/logo.png";
 import { ReactComponent as MetamaskIcon } from "assets/images/metamask.svg";
 import { ReactComponent as WalletConnectIcon } from "assets/images/walletconnect.svg";
-import { injected } from "connectors";
+import { injected, walletconnect } from "connectors";
 import { useWallet } from "connectors/hooks";
 import { useActiveWeb3React } from "hooks/useActiveWeb3React";
 import React, { useEffect, useState } from "react";
@@ -87,6 +87,7 @@ export const Layout = ({ children }) => {
                 _hover={{
                   bg: "gray.300",
                 }}
+                onClick={() => connect(walletconnect)}
               >
                 <Box h="12">
                   <WalletConnectIcon />
