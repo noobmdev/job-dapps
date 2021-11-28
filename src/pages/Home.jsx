@@ -4,6 +4,7 @@ import { Image } from "@chakra-ui/image";
 import { Input, InputGroup, InputLeftElement } from "@chakra-ui/input";
 import { Box, Grid, HStack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
+import { Spinner } from "@chakra-ui/spinner";
 import Job from "components/Job";
 import { JOB_CORE_METHODS, LOCATIONS } from "configs";
 import { useActiveWeb3React } from "hooks/useActiveWeb3React";
@@ -27,6 +28,8 @@ const Home = () => {
 
   const [jobs, setJobs] = useState([]);
 
+  const [loadingJobs, setLoadingJobs] = useState(true);
+  const [loadingRecruiters, setLoadingRecruiters] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalItem, setTotalItem] = useState(0);
@@ -44,13 +47,19 @@ const Home = () => {
 
   useEffect(() => {
     if (library) {
-      getJobs(library, perPage, (currentPage - 1) * perPage).then(setJobs);
+      getJobs(library, perPage, (currentPage - 1) * perPage)
+        .then(setJobs)
+        .then((_) => setLoadingJobs(false))
+        .catch((err) => setLoadingJobs(false));
     }
   }, [library, currentPage, perPage]);
 
   useEffect(() => {
     if (library && latestRecruiterId) {
-      getRecruiters(library, latestRecruiterId).then(setRecruiters);
+      getRecruiters(library, latestRecruiterId)
+        .then(setRecruiters)
+        .then((_) => setLoadingRecruiters(false))
+        .catch((err) => setLoadingRecruiters(false));
     }
   }, [library, latestRecruiterId]);
 
@@ -102,19 +111,26 @@ const Home = () => {
       <Box fontWeight="semibold" fontSize="3xl" textAlign="center" pb="4">
         Suitable Jobs
       </Box>
-      <Grid templateColumns="repeat(2, 1fr)" gap="8">
-        {jobs
-          .filter((job) => {
-            return (
-              job.location?.includes(searchQuery.location) &&
-              new RegExp(searchQuery.query, "gi").test(job.skills?.join(""))
-            );
-          })
-          .slice((currentPage - 1) * perPage, currentPage * perPage)
-          .map((job, idx) => (
-            <Job job={job} key={idx} />
-          ))}
-      </Grid>
+
+      {!loadingJobs ? (
+        <Grid templateColumns="repeat(2, 1fr)" gap="8">
+          {jobs
+            .filter((job) => {
+              return (
+                job.location?.includes(searchQuery.location) &&
+                new RegExp(searchQuery.query, "gi").test(job.skills?.join(""))
+              );
+            })
+            .slice((currentPage - 1) * perPage, currentPage * perPage)
+            .map((job, idx) => (
+              <Job job={job} key={idx} />
+            ))}
+        </Grid>
+      ) : (
+        <Box textAlign="center">
+          <Spinner />
+        </Box>
+      )}
 
       {/* Pagging */}
       {totalItem != 0 && !!jobs.length && (
@@ -140,20 +156,26 @@ const Home = () => {
       <Box fontWeight="semibold" fontSize="3xl" textAlign="center" p="4">
         Featured Recruiters
       </Box>
-      <Grid templateColumns="repeat(4, 1fr)" gap="8">
-        {recruiters.map((recruiter, idx) => (
-          <Box key={idx} cursor="pointer">
-            <Image
-              className="hover-shadow"
-              border="2px solid"
-              borderColor="gray.300"
-              borderRadius="md"
-              src={recruiter.logo}
-              alt="Segun Adebayo"
-            />
-          </Box>
-        ))}
-      </Grid>
+      {!loadingRecruiters ? (
+        <Grid templateColumns="repeat(4, 1fr)" gap="8">
+          {recruiters.map((recruiter, idx) => (
+            <Box key={idx} cursor="pointer">
+              <Image
+                className="hover-shadow"
+                border="2px solid"
+                borderColor="gray.300"
+                borderRadius="md"
+                src={recruiter.logo}
+                alt="Segun Adebayo"
+              />
+            </Box>
+          ))}
+        </Grid>
+      ) : (
+        <Box textAlign="center">
+          <Spinner />
+        </Box>
+      )}
     </Box>
   );
 };

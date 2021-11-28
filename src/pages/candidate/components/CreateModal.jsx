@@ -124,7 +124,7 @@ const CreateModal = ({ type, isOpen, onClose, onSubmit }) => {
             <Box>
               <FormLabel>Experiences</FormLabel>
               <Input
-                value={info.major ?? ""}
+                value={info.experiences ?? ""}
                 onChange={(e) =>
                   setInfo((info) => ({ ...info, experiences: e.target.value }))
                 }
