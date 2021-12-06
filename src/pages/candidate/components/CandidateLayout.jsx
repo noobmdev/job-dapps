@@ -6,12 +6,12 @@ import DashboardLayout from "components/layouts/DashboardLayout";
 const menuList = [
   {
     icon: FiUser,
-    name: "Your Profile",
+    name: "Hồ sơ",
     path: "/candidate",
   },
   {
     icon: GoTasklist,
-    name: "Applied Jobs",
+    name: "Công việc đã ứng tuyển",
     path: "/applied-jobs",
   },
 ];
@@ -19,7 +19,7 @@ const menuList = [
 const CandidateLayout = ({ children }) => {
   return (
     <DashboardLayout
-      redirectTittle="recruiter"
+      redirectTittle="nhà tuyển dụng"
       redirectPath="/recruiter"
       menuList={menuList}
     >

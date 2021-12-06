@@ -98,9 +98,8 @@ const Candidate = () => {
           [path]
         );
         setRefresh((pre) => !pre);
-        return;
       }
-      return;
+      alert("Cập nhật thông tin thành công");
     } catch (error) {
       console.error(error);
     }
@@ -109,7 +108,7 @@ const Candidate = () => {
   const handleCreateResume = async () => {
     try {
       if (!currentProfileUrl || !candidateProfile) {
-        return alert("Please update current profile");
+        return alert("Vui lòng cập nhật thông tin của bạn");
       }
       setCreatingResume(true);
       const path = await uploadIPFS(candidateProfile);
@@ -118,6 +117,7 @@ const Candidate = () => {
         setCreatingResume(false);
         return;
       }
+      alert("Tạo CV thành công");
     } catch (error) {
       setCreatingResume(false);
       console.error(error);
@@ -150,7 +150,7 @@ const Candidate = () => {
               onClick={handleCreateResume}
               isLoading={creatingResume}
             >
-              Create resume
+              Tạo CV
             </Button>
           </Box>
 
@@ -168,7 +168,7 @@ const Candidate = () => {
           >
             <HStack justify="space-between" align="center" pb="4">
               <Box fontSize="2xl" fontWeight="semibold">
-                Education
+                Đào tạo
               </Box>
               <Icon
                 onClick={() => handleShowModal(CANDIDATE_INFO_TYPE.EDUCATION)}
@@ -204,9 +204,7 @@ const Candidate = () => {
                 px="8"
                 spacing="6"
               >
-                <Box fontSize="lg">
-                  Your education makes you the person you are now
-                </Box>
+                <Box fontSize="lg">Trình độ đào tạo của bạn</Box>
                 <Image
                   alt="image"
                   src="https://www.topcv.vn/v3/profile/profile-png/profile-education.png"
@@ -223,7 +221,7 @@ const Candidate = () => {
           >
             <HStack justify="space-between" align="center" pb="4">
               <Box fontSize="2xl" fontWeight="semibold">
-                Experiences
+                Kinh nghiệm
               </Box>
               <Icon
                 onClick={onOpen}
@@ -259,9 +257,7 @@ const Candidate = () => {
                 px="8"
                 spacing="6"
               >
-                <Box fontSize="lg">
-                  Your work experience makes you the person you are now
-                </Box>
+                <Box fontSize="lg">Kinh nghiệm của bạn</Box>
                 <Image
                   alt="image"
                   src="https://www.topcv.vn/v3/profile/profile-png/profile-experience.png"
@@ -278,7 +274,7 @@ const Candidate = () => {
           >
             <HStack justify="space-between" align="center" pb="4">
               <Box fontSize="2xl" fontWeight="semibold">
-                Skills
+                Kỹ năng
               </Box>
               <Icon
                 onClick={onOpen}
@@ -313,9 +309,8 @@ const Candidate = () => {
                 spacing="6"
               >
                 <Box fontSize="lg">
-                  Thoroughly describing your skills helps others understand your
-                  strengths and increases your chances of connecting with
-                  others.
+                  Mô tả kỹ năng giúp cho người khác hiểu được điểm mạnh và tăng
+                  cơ hội kết nối với người khác
                 </Box>
                 <Image
                   alt="image"
@@ -333,7 +328,7 @@ const Candidate = () => {
           >
             <HStack justify="space-between" align="center" pb="4">
               <Box fontSize="2xl" fontWeight="semibold">
-                Projects
+                Sản phẩm
               </Box>
               <Icon
                 onClick={onOpen}
@@ -366,9 +361,7 @@ const Candidate = () => {
                 px="8"
                 spacing="6"
               >
-                <Box fontSize="lg">
-                  Your work experience makes you the person you are now
-                </Box>
+                <Box fontSize="lg">Sản phẩm của bạn</Box>
                 <Image
                   alt="image"
                   src="https://www.topcv.vn/v3/profile/profile-png/profile-project.png"
@@ -385,7 +378,7 @@ const Candidate = () => {
           >
             <HStack justify="space-between" align="center" pb="4">
               <Box fontSize="2xl" fontWeight="semibold">
-                Certificates
+                Chứng chỉ
               </Box>
               <Icon
                 onClick={onOpen}
@@ -420,10 +413,7 @@ const Candidate = () => {
                 px="8"
                 spacing="6"
               >
-                <Box fontSize="lg">
-                  You can describe it more clearly in your CV by inserting a
-                  photo of your certificate or certificate of merit.
-                </Box>
+                <Box fontSize="lg">Chứng chỉ của bạn</Box>
                 <Image
                   alt="image"
                   src="https://www.topcv.vn/v3/profile/profile-png/profile-certificate.png"

@@ -138,6 +138,7 @@ const JobsManagement = () => {
       setRefresh((pre) => !pre);
       setSubmitting(false);
       onClose(); // TODO change to refresh
+      alert("Tạo công việc mới thành công");
     } catch (error) {
       console.error(error);
       setSubmitting(false);
@@ -149,24 +150,24 @@ const JobsManagement = () => {
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create new job</ModalHeader>
+          <ModalHeader>Tạo công việc mới</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing="4" align="stretch">
               <FormControl isRequired>
-                <FormLabel>Job's Title</FormLabel>
+                <FormLabel>Tiêu đề công việc</FormLabel>
                 <Input
                   value={jobInfo.title}
                   onChange={(e) =>
                     setJobInfo((job) => ({ ...job, title: e.target.value }))
                   }
-                  placeholder="Job's title"
+                  placeholder="Tiêu đề công việc"
                 />
               </FormControl>
 
               <HStack>
                 <FormControl isRequired>
-                  <FormLabel>Salary Min</FormLabel>
+                  <FormLabel>Lương tối thiệu</FormLabel>
                   <NumberInput
                     value={jobInfo.salaryMin}
                     onChange={(v) =>
@@ -183,7 +184,7 @@ const JobsManagement = () => {
                   </NumberInput>
                 </FormControl>
                 <FormControl isRequired>
-                  <FormLabel>Salary Max</FormLabel>
+                  <FormLabel>Lương tối đa</FormLabel>
                   <NumberInput
                     value={jobInfo.salaryMax}
                     onChange={(v) =>
@@ -202,7 +203,7 @@ const JobsManagement = () => {
               </HStack>
 
               <FormControl isRequired>
-                <FormLabel>Location</FormLabel>
+                <FormLabel>Vị trí</FormLabel>
                 <Select
                   value={jobInfo.location}
                   onChange={(e) =>
@@ -218,7 +219,7 @@ const JobsManagement = () => {
               </FormControl>
 
               <FormControl isRequired>
-                <FormLabel>Skills</FormLabel>
+                <FormLabel>Kỹ năng</FormLabel>
                 <CheckboxGroup
                   colorScheme="green"
                   value={jobInfo.skills}
@@ -235,7 +236,7 @@ const JobsManagement = () => {
               </FormControl>
 
               <FormControl isRequired>
-                <FormLabel>Experience</FormLabel>
+                <FormLabel>Kinh nghiệm</FormLabel>
                 <Select
                   value={jobInfo.experience}
                   onChange={(e) =>
@@ -254,7 +255,7 @@ const JobsManagement = () => {
               </FormControl>
 
               <FormControl isRequired>
-                <FormLabel>Descriptions</FormLabel>
+                <FormLabel>Mô tả</FormLabel>
                 <Textarea
                   value={jobInfo.descriptions}
                   onChange={(e) =>
@@ -263,11 +264,11 @@ const JobsManagement = () => {
                       descriptions: e.target.value,
                     }))
                   }
-                  placeholder="Descriptions"
+                  placeholder="Mô tả"
                 />
               </FormControl>
               <FormControl isRequired>
-                <FormLabel>Benefits</FormLabel>
+                <FormLabel>Phúc lợi</FormLabel>
                 <Textarea
                   value={jobInfo.benefits}
                   onChange={(e) =>
@@ -276,11 +277,11 @@ const JobsManagement = () => {
                       benefits: e.target.value,
                     }))
                   }
-                  placeholder="Benefits"
+                  placeholder="Phúc lợi"
                 />
               </FormControl>
               <FormControl isRequired>
-                <FormLabel>Requirements</FormLabel>
+                <FormLabel>Yêu cầu</FormLabel>
                 <Textarea
                   value={jobInfo.requirements}
                   onChange={(e) =>
@@ -289,7 +290,7 @@ const JobsManagement = () => {
                       requirements: e.target.value,
                     }))
                   }
-                  placeholder="Requirements"
+                  placeholder="Yêu cầu"
                 />
               </FormControl>
             </VStack>
@@ -301,7 +302,7 @@ const JobsManagement = () => {
               onClick={handleCreateNewJob}
               isLoading={submitting}
             >
-              Save
+              Lưu
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -309,7 +310,7 @@ const JobsManagement = () => {
 
       <Box pb="4">
         <Button colorScheme="teal" onClick={onOpen}>
-          Create a new job
+          Tạo công việc mới
         </Button>
       </Box>
       {isLoading ? (

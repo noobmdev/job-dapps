@@ -9,30 +9,32 @@ export const ResumePDF = React.forwardRef((props, ref) => {
       <div ref={ref}>
         {resume && (
           <div>
-            <div>Personal Information</div>
+            <div>Thông tin cá nhân</div>
             {resume[CANDIDATE_INFO_TYPE.PERSONAL_INFO]?.length ? (
               <>
                 <div>
-                  Full Name: {resume[CANDIDATE_INFO_TYPE.PERSONAL_INFO][0].name}
+                  Họ và tên: {resume[CANDIDATE_INFO_TYPE.PERSONAL_INFO][0].name}
                 </div>
                 <div>
-                  Gender: {resume[CANDIDATE_INFO_TYPE.PERSONAL_INFO][0].gender}
+                  Giới tính:{" "}
+                  {resume[CANDIDATE_INFO_TYPE.PERSONAL_INFO][0].gender}
                 </div>
                 <div>
-                  Year of birthday:
+                  Năm sinh:
                   {resume[CANDIDATE_INFO_TYPE.PERSONAL_INFO][0].yearOfBirth}
                 </div>
                 <div>
                   Email: {resume[CANDIDATE_INFO_TYPE.PERSONAL_INFO][0].email}
                 </div>
                 <div>
-                  Phone: {resume[CANDIDATE_INFO_TYPE.PERSONAL_INFO][0].phone}
+                  Điện thoại:{" "}
+                  {resume[CANDIDATE_INFO_TYPE.PERSONAL_INFO][0].phone}
                 </div>
                 <div>
-                  Address: {resume[CANDIDATE_INFO_TYPE.PERSONAL_INFO][0].addr}
+                  Địa chỉ: {resume[CANDIDATE_INFO_TYPE.PERSONAL_INFO][0].addr}
                 </div>
                 <div>
-                  Bio: {resume[CANDIDATE_INFO_TYPE.PERSONAL_INFO][0].bio}
+                  Giới thiệu: {resume[CANDIDATE_INFO_TYPE.PERSONAL_INFO][0].bio}
                 </div>
               </>
             ) : (

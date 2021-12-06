@@ -2,7 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { Icon } from "@chakra-ui/icon";
 import { Image } from "@chakra-ui/image";
 import { Input, InputGroup, InputLeftElement } from "@chakra-ui/input";
-import { Box, Grid, HStack } from "@chakra-ui/layout";
+import { Box, Grid, HStack, VStack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
 import { Spinner } from "@chakra-ui/spinner";
 import Job from "components/Job";
@@ -18,6 +18,7 @@ import {
   getLatestRecruiterId,
   getRecruiters,
 } from "utils/callContract";
+import Recruiters from "./Recruiters";
 
 const Home = () => {
   const { library } = useActiveWeb3React();
@@ -65,51 +66,77 @@ const Home = () => {
 
   return (
     <Box color="white">
-      <HStack px="40" py="4" spacing="4">
-        <InputGroup>
-          <InputLeftElement
-            pointerEvents="none"
-            children={<Icon as={MdSearch} color="white" />}
-          />
-          <Input
-            type="text"
-            placeholder="Skills"
-            value={searchQuery.query}
-            onChange={(e) =>
-              setSearchQuery((search) => ({ ...search, query: e.target.value }))
-            }
-          />
-        </InputGroup>
-        <HStack minW="12em" pos="relative">
-          {/* <Input type="text" placeholder="Locations" /> */}
-          <Select
-            color="white"
-            variant="outline"
-            value={searchQuery.location}
-            onChange={(e) =>
-              setSearchQuery((search) => ({
-                ...search,
-                location: e.target.value,
-              }))
-            }
-          >
-            <option value="" style={{ display: "none" }}>
-              Locations
-            </option>
-            {Object.values(LOCATIONS).map((l) => (
-              <option style={{ color: "black" }} key={l} value={l}>
-                {l}
+      <VStack
+        pos="absolute"
+        bg="red"
+        h="24em"
+        top="14"
+        left="0"
+        right="0"
+        bgImage="https://vieclam24h.vn/it/static/img/banner/bg-banner-img.png"
+        bgPos="center"
+        bgSize="cover"
+        spacing="8"
+      >
+        <Box>
+          <Box fontSize="4xl" fontWeight="bold" textAlign="center">
+            Công nghệ dẫn đầu cuộc chơi
+          </Box>
+          <Box textAlign="center">
+            Tìm công việc Công nghệ Thông tin phù hợp nhất với bạn.
+          </Box>
+        </Box>
+        <HStack px="40" py="4" spacing="4">
+          <InputGroup>
+            <InputLeftElement
+              pointerEvents="none"
+              children={<Icon as={MdSearch} color="white" />}
+            />
+            <Input
+              type="text"
+              placeholder="Skills"
+              value={searchQuery.query}
+              onChange={(e) =>
+                setSearchQuery((search) => ({
+                  ...search,
+                  query: e.target.value,
+                }))
+              }
+            />
+          </InputGroup>
+          <HStack minW="12em" pos="relative">
+            <Select
+              color="white"
+              variant="outline"
+              value={searchQuery.location}
+              onChange={(e) =>
+                setSearchQuery((search) => ({
+                  ...search,
+                  location: e.target.value,
+                }))
+              }
+            >
+              <option value="" style={{ display: "none" }}>
+                Vị trí
               </option>
-            ))}
-          </Select>
+              {Object.values(LOCATIONS).map((l) => (
+                <option style={{ color: "black" }} key={l} value={l}>
+                  {l}
+                </option>
+              ))}
+            </Select>
+          </HStack>
         </HStack>
-        {/* <Button px="8" colorScheme="teal">
-          Search
-        </Button> */}
-      </HStack>
+      </VStack>
 
-      <Box fontWeight="semibold" fontSize="3xl" textAlign="center" pb="4">
-        Suitable Jobs
+      <Box
+        fontWeight="semibold"
+        fontSize="3xl"
+        textAlign="center"
+        pb="4"
+        pt="14em"
+      >
+        Công việc phù hợp
       </Box>
 
       {!loadingJobs ? (
@@ -154,23 +181,10 @@ const Home = () => {
 
       {/* Recuiters */}
       <Box fontWeight="semibold" fontSize="3xl" textAlign="center" p="4">
-        Featured Recruiters
+        Nhà tuyển dụng nổi bật
       </Box>
       {!loadingRecruiters ? (
-        <Grid templateColumns="repeat(4, 1fr)" gap="8">
-          {recruiters.map((recruiter, idx) => (
-            <Box key={idx} cursor="pointer">
-              <Image
-                className="hover-shadow"
-                border="2px solid"
-                borderColor="gray.300"
-                borderRadius="md"
-                src={recruiter.logo}
-                alt="Segun Adebayo"
-              />
-            </Box>
-          ))}
-        </Grid>
+        <Recruiters recruiters={recruiters} />
       ) : (
         <Box textAlign="center">
           <Spinner />

@@ -62,46 +62,44 @@ const CreateModal = ({ type, isOpen, onClose, onSubmit }) => {
         return (
           <>
             <Box>
-              <FormLabel>Education Name</FormLabel>
+              <FormLabel>Tên cơ sở giáo dục</FormLabel>
               <Input
                 value={info.name ?? ""}
                 onChange={(e) =>
                   setInfo((info) => ({ ...info, name: e.target.value }))
                 }
-                placeholder="Education Name"
+                placeholder="Tên cơ sở giáo dục"
               />
             </Box>
             <Box>
-              <FormLabel>Major</FormLabel>
+              <FormLabel>Chuyên ngành</FormLabel>
               <Input
                 value={info.major ?? ""}
                 onChange={(e) =>
                   setInfo((info) => ({ ...info, major: e.target.value }))
                 }
-                placeholder="Major"
+                placeholder="Chuyên ngành"
               />
             </Box>
             <HStack>
               <Box flex="1">
-                <FormLabel>From</FormLabel>
+                <FormLabel>Từ</FormLabel>
                 <Input
                   value={info.from ?? ""}
                   onChange={(e) =>
                     setInfo((info) => ({ ...info, from: e.target.value }))
                   }
                   type="date"
-                  placeholder="Major"
                 />
               </Box>
               <Box flex="1">
-                <FormLabel>To</FormLabel>
+                <FormLabel>Đến</FormLabel>
                 <Input
                   value={info.to ?? ""}
                   onChange={(e) =>
                     setInfo((info) => ({ ...info, to: e.target.value }))
                   }
                   type="date"
-                  placeholder="Full name"
                 />
               </Box>
             </HStack>
@@ -112,23 +110,23 @@ const CreateModal = ({ type, isOpen, onClose, onSubmit }) => {
         return (
           <>
             <Box>
-              <FormLabel>Company</FormLabel>
+              <FormLabel>Công ty</FormLabel>
               <Input
                 value={info.name ?? ""}
                 onChange={(e) =>
                   setInfo((info) => ({ ...info, name: e.target.value }))
                 }
-                placeholder="Company"
+                placeholder="Công ty"
               />
             </Box>
             <Box>
-              <FormLabel>Experiences</FormLabel>
+              <FormLabel>Kinh nghiệm</FormLabel>
               <Input
                 value={info.experiences ?? ""}
                 onChange={(e) =>
                   setInfo((info) => ({ ...info, experiences: e.target.value }))
                 }
-                placeholder="Experiences"
+                placeholder="Kinh nghiệm"
               />
             </Box>
             <HStack>
@@ -140,7 +138,6 @@ const CreateModal = ({ type, isOpen, onClose, onSubmit }) => {
                     setInfo((info) => ({ ...info, from: e.target.value }))
                   }
                   type="date"
-                  placeholder="Major"
                 />
               </Box>
               <Box flex="1">
@@ -151,7 +148,6 @@ const CreateModal = ({ type, isOpen, onClose, onSubmit }) => {
                     setInfo((info) => ({ ...info, to: e.target.value }))
                   }
                   type="date"
-                  placeholder="Full name"
                 />
               </Box>
             </HStack>
@@ -162,23 +158,23 @@ const CreateModal = ({ type, isOpen, onClose, onSubmit }) => {
         return (
           <>
             <Box>
-              <FormLabel>Skill Name</FormLabel>
+              <FormLabel>Kỹ năng</FormLabel>
               <Input
                 value={info.name ?? ""}
                 onChange={(e) =>
                   setInfo((info) => ({ ...info, name: e.target.value }))
                 }
-                placeholder="Skill Name"
+                placeholder="Tên kỹ năng"
               />
             </Box>
             <Box>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Mô tả</FormLabel>
               <Textarea
                 value={info.description ?? ""}
                 onChange={(e) =>
                   setInfo((info) => ({ ...info, description: e.target.value }))
                 }
-                placeholder="Description"
+                placeholder="Mô tả"
               />
             </Box>
           </>
@@ -188,23 +184,23 @@ const CreateModal = ({ type, isOpen, onClose, onSubmit }) => {
         return (
           <>
             <Box>
-              <FormLabel>Project Name</FormLabel>
+              <FormLabel>Tên sản phẩm</FormLabel>
               <Input
                 value={info.name ?? ""}
                 onChange={(e) =>
                   setInfo((info) => ({ ...info, name: e.target.value }))
                 }
-                placeholder="Project Name"
+                placeholder="Tên sản phẩm"
               />
             </Box>
             <Box>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Mô tả</FormLabel>
               <Textarea
                 value={info.description ?? ""}
                 onChange={(e) =>
                   setInfo((info) => ({ ...info, description: e.target.value }))
                 }
-                placeholder="Description"
+                placeholder="Mô tả"
               />
             </Box>
           </>
@@ -214,23 +210,23 @@ const CreateModal = ({ type, isOpen, onClose, onSubmit }) => {
         return (
           <>
             <Box>
-              <FormLabel>Certificate Name</FormLabel>
+              <FormLabel>Tên chứng chỉ</FormLabel>
               <Input
                 value={info.name ?? ""}
                 onChange={(e) =>
                   setInfo((info) => ({ ...info, name: e.target.value }))
                 }
-                placeholder="Certificate Name"
+                placeholder="Tên chứng chỉ"
               />
             </Box>
             <Box>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Mô tả</FormLabel>
               <Textarea
                 value={info.description ?? ""}
                 onChange={(e) =>
                   setInfo((info) => ({ ...info, description: e.target.value }))
                 }
-                placeholder="Description"
+                placeholder="Mô tả"
               />
             </Box>
           </>
@@ -240,23 +236,23 @@ const CreateModal = ({ type, isOpen, onClose, onSubmit }) => {
         return (
           <>
             <Box>
-              <FormLabel>Prize Name</FormLabel>
+              <FormLabel>Tên giải thưởng</FormLabel>
               <Input
                 value={info.name ?? ""}
                 onChange={(e) =>
                   setInfo((info) => ({ ...info, name: e.target.value }))
                 }
-                placeholder="Prize Name"
+                placeholder="Tên giải thưởng"
               />
             </Box>
             <Box>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Mô tả</FormLabel>
               <Textarea
                 value={info.description ?? ""}
                 onChange={(e) =>
                   setInfo((info) => ({ ...info, description: e.target.value }))
                 }
-                placeholder="Description"
+                placeholder="Mô tả"
               />
             </Box>
           </>
@@ -284,7 +280,7 @@ const CreateModal = ({ type, isOpen, onClose, onSubmit }) => {
             isLoading={submitting}
             onClick={handleSubmitting}
           >
-            Save
+            Lưu
           </Button>
         </ModalFooter>
       </ModalContent>

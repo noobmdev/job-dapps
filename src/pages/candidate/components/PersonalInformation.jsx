@@ -50,7 +50,7 @@ const PersonalInformation = ({ candidateProfile, updateHandler, infoType }) => {
               colorScheme="teal"
               isLoading={submitting}
             >
-              Save
+              Lưu
             </Button>
           )}
           <Icon
