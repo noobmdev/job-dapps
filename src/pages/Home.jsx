@@ -2,15 +2,16 @@ import { Button } from "@chakra-ui/button";
 import { Icon } from "@chakra-ui/icon";
 import { Image } from "@chakra-ui/image";
 import { Input, InputGroup, InputLeftElement } from "@chakra-ui/input";
-import { Box, Grid, HStack, VStack } from "@chakra-ui/layout";
+import { Box, Grid, GridItem, HStack, VStack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
 import { Spinner } from "@chakra-ui/spinner";
 import Job from "components/Job";
 import { JOB_CORE_METHODS, LOCATIONS } from "configs";
 import { useActiveWeb3React } from "hooks/useActiveWeb3React";
 import { callContract, useJobCoreContract } from "hooks/useContract";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { MdSearch } from "react-icons/md";
+import { useLocation, useHistory } from "react-router-dom";
 import { removeNumericKey } from "utils";
 import {
   getJobs,
@@ -21,8 +22,9 @@ import {
 import Recruiters from "./Recruiters";
 
 const Home = () => {
+  const location = useLocation();
+  const history = useHistory();
   const { library } = useActiveWeb3React();
-  const jobCoreContract = useJobCoreContract();
 
   const [latestRecruiterId, setLatestRecruiterId] = useState();
   const [recruiters, setRecruiters] = useState([]);
@@ -38,6 +40,36 @@ const Home = () => {
     query: "",
     location: "",
   });
+  const [querySearch, setQuerySearch] = useState({
+    query: "",
+    location: "",
+  });
+  const urlQuery = new URLSearchParams(location.search);
+
+  const urlQueryQuery = urlQuery.get("query");
+  const urlQueryLocation = urlQuery.get("location");
+
+  useEffect(() => {
+    setSearchQuery((pre) => ({
+      ...pre,
+      query: urlQueryQuery ?? "",
+    }));
+    setQuerySearch((pre) => ({
+      ...pre,
+      query: urlQueryQuery ?? "",
+    }));
+  }, [urlQueryQuery]);
+
+  useEffect(() => {
+    setSearchQuery((pre) => ({
+      ...pre,
+      location: urlQueryLocation ?? "",
+    }));
+    setQuerySearch((pre) => ({
+      ...pre,
+      location: urlQueryLocation ?? "",
+    }));
+  }, [urlQueryLocation]);
 
   useEffect(() => {
     if (library) {
@@ -64,6 +96,17 @@ const Home = () => {
     }
   }, [library, latestRecruiterId]);
 
+  const _jobs = useMemo(
+    () =>
+      jobs.filter((job) => {
+        return (
+          job.location?.includes(querySearch.location) &&
+          new RegExp(querySearch.query, "gi").test(job.skills?.join(""))
+        );
+      }),
+    [jobs, querySearch.location, querySearch.query]
+  );
+
   return (
     <Box color="white">
       <VStack
@@ -86,7 +129,7 @@ const Home = () => {
             Tìm công việc Công nghệ Thông tin phù hợp nhất với bạn.
           </Box>
         </Box>
-        <HStack px="40" py="4" spacing="4">
+        <HStack py="4" spacing="4">
           <InputGroup>
             <InputLeftElement
               pointerEvents="none"
@@ -126,6 +169,28 @@ const Home = () => {
               ))}
             </Select>
           </HStack>
+          <Box>
+            <Button
+              id="search"
+              colorScheme="blue"
+              onClick={() => {
+                let query = {};
+                if (searchQuery?.query) {
+                  query.query = searchQuery?.query;
+                }
+                if (searchQuery?.location) {
+                  query.location = searchQuery?.location;
+                }
+                let params;
+                if (Object.keys(query).length) {
+                  params = new URLSearchParams(query);
+                }
+                params && history.replace({ search: params.toString() });
+              }}
+            >
+              TÌM KIẾM
+            </Button>
+          </Box>
         </HStack>
       </VStack>
 
@@ -141,17 +206,17 @@ const Home = () => {
 
       {!loadingJobs ? (
         <Grid templateColumns="repeat(2, 1fr)" gap="8">
-          {jobs
-            .filter((job) => {
-              return (
-                job.location?.includes(searchQuery.location) &&
-                new RegExp(searchQuery.query, "gi").test(job.skills?.join(""))
-              );
-            })
-            .slice((currentPage - 1) * perPage, currentPage * perPage)
-            .map((job, idx) => (
-              <Job job={job} key={idx} />
-            ))}
+          {!!_jobs?.length ? (
+            _jobs
+              .slice((currentPage - 1) * perPage, currentPage * perPage)
+              .map((job, idx) => <Job job={job} key={idx} />)
+          ) : (
+            <GridItem colSpan="2" textAlign="center">
+              <Box fontSize="lg" fontWeight="semibol">
+                Không có công việc phù hợp
+              </Box>
+            </GridItem>
+          )}
         </Grid>
       ) : (
         <Box textAlign="center">
@@ -159,27 +224,29 @@ const Home = () => {
         </Box>
       )}
 
-      {/* Pagging */}
-      {totalItem != 0 && !!jobs.length && (
+      {/* Paging */}
+      {!!_jobs.length && (
         <HStack align="center" justify="center" my="8" spacing="4">
-          {new Array(Math.ceil(totalItem / perPage)).fill("").map((e, idx) => (
-            <Box
-              key={idx}
-              px="4"
-              py="2"
-              border="1px solid"
-              borderColor="white"
-              cursor="pointer"
-              onClick={() => setCurrentPage(idx + 1)}
-              bg={currentPage === idx + 1 ? "teal.400" : ""}
-            >
-              {idx + 1}
-            </Box>
-          ))}
+          {new Array(Math.ceil(_jobs.length / perPage))
+            .fill("")
+            .map((e, idx) => (
+              <Box
+                key={idx}
+                px="4"
+                py="2"
+                border="1px solid"
+                borderColor="white"
+                cursor="pointer"
+                onClick={() => setCurrentPage(idx + 1)}
+                bg={currentPage === idx + 1 ? "teal.400" : ""}
+              >
+                {idx + 1}
+              </Box>
+            ))}
         </HStack>
       )}
 
-      {/* Recuiters */}
+      {/* Recruiters */}
       <Box fontWeight="semibold" fontSize="3xl" textAlign="center" p="4">
         Nhà tuyển dụng nổi bật
       </Box>

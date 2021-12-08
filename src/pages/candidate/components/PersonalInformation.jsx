@@ -41,6 +41,7 @@ const PersonalInformation = ({ candidateProfile, updateHandler, infoType }) => {
         <HStack>
           {canEdit && (
             <Button
+              id="save_info"
               onClick={async () => {
                 setSubmitting(true);
                 await updateHandler(personalInfo, infoType);

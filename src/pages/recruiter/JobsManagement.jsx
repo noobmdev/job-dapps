@@ -298,6 +298,7 @@ const JobsManagement = () => {
 
           <ModalFooter>
             <Button
+              id="create_job"
               colorScheme="teal"
               onClick={handleCreateNewJob}
               isLoading={submitting}
@@ -309,7 +310,7 @@ const JobsManagement = () => {
       </Modal>
 
       <Box pb="4">
-        <Button colorScheme="teal" onClick={onOpen}>
+        <Button colorScheme="teal" onClick={onOpen} id="show_create_job">
           Tạo công việc mới
         </Button>
       </Box>

@@ -124,18 +124,19 @@ export const Layout = ({ children }) => {
           <HStack flex="1" justify="flex-end" spacing="4">
             {isConnected ? (
               <HStack>
-                {/* {ETHBalacne && (
-                  <Button colorScheme="teal">{ETHBalacne} BNB</Button>
-                )} */}
-                <Link to="/candidate">
-                  <Button colorScheme="teal">Nhà tuyển dụng</Button>
+                <Link to="/recruiter">
+                  <Button id="recruiter" colorScheme="teal">
+                    Nhà tuyển dụng
+                  </Button>
                 </Link>
                 <Link to="/candidate">
-                  <Button colorScheme="teal">Ứng viên</Button>
+                  <Button id="candidate" colorScheme="teal">
+                    Ứng viên
+                  </Button>
                 </Link>
               </HStack>
             ) : (
-              <Button colorScheme="teal" onClick={onOpen}>
+              <Button id="connect" colorScheme="teal" onClick={onOpen}>
                 Kết nối ví
               </Button>
             )}

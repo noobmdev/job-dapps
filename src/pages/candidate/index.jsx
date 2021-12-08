@@ -146,6 +146,7 @@ const Candidate = () => {
         <VStack align="stretch" spacing="4">
           <Box>
             <Button
+              id="create_resume"
               colorScheme="teal"
               onClick={handleCreateResume}
               isLoading={creatingResume}

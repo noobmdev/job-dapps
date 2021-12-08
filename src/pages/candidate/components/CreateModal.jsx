@@ -276,6 +276,7 @@ const CreateModal = ({ type, isOpen, onClose, onSubmit }) => {
         </ModalBody>
         <ModalFooter>
           <Button
+            id="save"
             colorScheme="teal"
             isLoading={submitting}
             onClick={handleSubmitting}

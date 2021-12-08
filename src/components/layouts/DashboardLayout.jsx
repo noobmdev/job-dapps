@@ -28,11 +28,6 @@ const DashboardLayout = ({
             </Link>
           ))}
         </Box>
-        {/* <Box textAlign="center" mt="4">
-          <Link to={redirectPath}>
-            <Button colorScheme="teal">Chuyển sang {redirectTittle}</Button>
-          </Link>
-        </Box> */}
       </Box>
 
       <Box flex="1" px="4">

@@ -137,6 +137,7 @@ const JobDetail = () => {
       <ReactToPrint
         trigger={() => (
           <button
+            id="print_pdf"
             ref={clickRef}
             style={{
               padding: "1em 0.5em",
@@ -181,6 +182,7 @@ const JobDetail = () => {
 
           <ModalFooter>
             <Button
+              id="apply_job"
               onClick={applyJob}
               isLoading={submitting}
               colorScheme="teal"
@@ -208,6 +210,7 @@ const JobDetail = () => {
                   {job.title}
                 </Box>
                 <Button
+                  id="show_apply"
                   onClick={onOpen}
                   textTransform="uppercase"
                   colorScheme="teal"
