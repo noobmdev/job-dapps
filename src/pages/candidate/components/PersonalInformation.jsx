@@ -36,7 +36,7 @@ const PersonalInformation = ({ candidateProfile, updateHandler, infoType }) => {
     <Box p="6" border="1px solid" borderColor="gray.300" borderRadius="md">
       <HStack justify="space-between" align="center" pb="4">
         <Box fontSize="2xl" fontWeight="semibold">
-          Personal Information
+          Thông tin cá nhân
         </Box>
         <HStack>
           {canEdit && (
@@ -65,18 +65,18 @@ const PersonalInformation = ({ candidateProfile, updateHandler, infoType }) => {
       </HStack>
       <Grid templateColumns="repeat(2, 1fr)" gap="4">
         <GridItem colSpan="2">
-          <FormLabel>Full Name</FormLabel>
+          <FormLabel>Họ và tên</FormLabel>
           <Input
             value={personalInfo.name}
             onChange={(e) =>
               setPersonalInfo((info) => ({ ...info, name: e.target.value }))
             }
             isDisabled={!canEdit}
-            placeholder="Full name"
+            placeholder="Họ và tên"
           />
         </GridItem>
         <GridItem>
-          <FormLabel>Gender</FormLabel>
+          <FormLabel>Giới tính</FormLabel>
           <RadioGroup
             value={personalInfo.gender}
             onChange={(value) =>
@@ -94,7 +94,7 @@ const PersonalInformation = ({ candidateProfile, updateHandler, infoType }) => {
           </RadioGroup>
         </GridItem>
         <GridItem>
-          <FormLabel>Year of birthday</FormLabel>
+          <FormLabel>Năm sinh</FormLabel>
           <Select
             value={personalInfo.yearOfBirth}
             onChange={(e) =>
@@ -129,7 +129,7 @@ const PersonalInformation = ({ candidateProfile, updateHandler, infoType }) => {
           />
         </GridItem>
         <GridItem>
-          <FormLabel>Phone</FormLabel>
+          <FormLabel>Điện thoại</FormLabel>
           <Input
             value={personalInfo.phone}
             onChange={(e) =>
@@ -140,25 +140,25 @@ const PersonalInformation = ({ candidateProfile, updateHandler, infoType }) => {
           />
         </GridItem>
         <GridItem colSpan="2">
-          <FormLabel>Address</FormLabel>
+          <FormLabel>Địa chỉ</FormLabel>
           <Input
             value={personalInfo.addr}
             onChange={(e) =>
               setPersonalInfo((info) => ({ ...info, addr: e.target.value }))
             }
             isDisabled={!canEdit}
-            placeholder="Address"
+            placeholder="Địa chỉ"
           />
         </GridItem>
         <GridItem colSpan="2">
-          <FormLabel>Bio</FormLabel>
+          <FormLabel>Giới thiệu</FormLabel>
           <Textarea
             value={personalInfo.bio}
             onChange={(e) =>
               setPersonalInfo((info) => ({ ...info, bio: e.target.value }))
             }
             isDisabled={!canEdit}
-            placeholder="Bio"
+            placeholder="Giới thiệu"
           />
         </GridItem>
       </Grid>
