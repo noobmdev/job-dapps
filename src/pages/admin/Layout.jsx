@@ -23,11 +23,7 @@ const menuList = [
 
 const RecruiterLayout = ({ children }) => {
   return (
-    <DashboardLayout
-      redirectTittle="ứng viên"
-      redirectPath="/candidate"
-      menuList={menuList}
-    >
+    <DashboardLayout redirectTittle="" redirectPath="" menuList={menuList}>
       {children}
     </DashboardLayout>
   );

@@ -180,6 +180,9 @@ contract JobCore is Ownable {
     // address => jobIds[]
     mapping(address => uint256[]) public appliedJobs;
 
+    mapping(address => uint256) purchaseFeeTimes;
+    uint256 PURCHASE_FEE = 1e15; // 0.001 ether
+
     /* 
     / === CONSTRUCTOR
     */
@@ -246,6 +249,15 @@ contract JobCore is Ownable {
     /* 
     / === FUNCTIONS
     */
+    function isRecuiter(address account) external view returns(bool) {
+        return recruiterToId[account] != 0;
+    }
+
+    function purchaseFeeRecruiter() external payable {
+        require(msg.value >= PURCHASE_FEE, "tranfser not enough fee");
+        purchaseFeeTimes[_msgSender()] = block.timestamp + 365 days;
+    }
+
     function addRecruiter(
         address _recruiter,
         string memory _name, 
@@ -276,8 +288,7 @@ contract JobCore is Ownable {
     }
     
     function getLatestRecruiterId() view public returns(uint256) {
-        uint256 _latestRecruiterId = latestRecruiterId.current();
-        return _latestRecruiterId;
+        return latestRecruiterId.current();
     }
     
     function addJob(
@@ -316,8 +327,11 @@ contract JobCore is Ownable {
     }
     
     function getLatestJobId() view public returns(uint256) {
-        uint256 _latestJobId = latestJobId.current();
-        return _latestJobId;
+        return latestJobId.current();
+    }
+
+     function getLatestResumeId() view public returns(uint256) {
+        return latestResumeId.current();
     }
     
     function getOwnerJobs() view public returns(Job[] memory) {

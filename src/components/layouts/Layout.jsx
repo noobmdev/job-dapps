@@ -20,13 +20,16 @@ import { useActiveWeb3React } from "hooks/useActiveWeb3React";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "styles/Layout.css";
+import { getIsRecuiter, getOwner } from "utils/callContract";
 
 export const Layout = ({ children }) => {
-  const { account, isConnected, library } = useActiveWeb3React();
+  const { account, chainId, library, isConnected } = useActiveWeb3React();
   const { connect } = useWallet();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [ETHBalacne, setETHBalance] = useState();
+  const [isRecruiter, setIsRecruiter] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
     const getBalance = async () => {
@@ -35,10 +38,13 @@ export const Layout = ({ children }) => {
         .then((balance) =>
           setETHBalance(parseFloat(formatEther(balance.toString())).toFixed(4))
         );
+
+      getIsRecuiter(library, account).then(setIsRecruiter);
+      getOwner(library, account).then(setIsOwner);
     };
 
-    isConnected && getBalance();
-  }, [isConnected]);
+    library && account && chainId && getBalance();
+  }, [library, account, chainId]);
 
   return (
     <Box minH="100vh" color="white">
@@ -124,11 +130,20 @@ export const Layout = ({ children }) => {
           <HStack flex="1" justify="flex-end" spacing="4">
             {isConnected ? (
               <HStack>
-                <Link to="/recruiter">
-                  <Button id="recruiter" colorScheme="teal">
-                    Nhà tuyển dụng
-                  </Button>
-                </Link>
+                {isOwner && (
+                  <Link to="/admin">
+                    <Button id="recruiter" colorScheme="teal">
+                      ADMIN
+                    </Button>
+                  </Link>
+                )}
+                {isRecruiter && (
+                  <Link to="/recruiter">
+                    <Button id="recruiter" colorScheme="teal">
+                      Nhà tuyển dụng
+                    </Button>
+                  </Link>
+                )}
                 <Link to="/candidate">
                   <Button id="candidate" colorScheme="teal">
                     Ứng viên

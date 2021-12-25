@@ -5,11 +5,18 @@ import CandidateAppliedJobs from "pages/candidate/AppliedJobs";
 import Candidate from "pages/candidate";
 import Recruiter from "pages/recruiter";
 import JobsManagement from "pages/recruiter/JobsManagement";
+import Resumes from "pages/recruiter/Resumes";
+import Admin from "pages/admin";
 
 export const routes = [
   {
     path: "/",
     component: Home,
+    exact: true,
+  },
+  {
+    path: "/admin",
+    component: Admin,
     exact: true,
   },
   {
@@ -30,6 +37,11 @@ export const routes = [
   {
     path: "/recruiter/jobs-management",
     component: JobsManagement,
+    exact: true,
+  },
+  {
+    path: "/recruiter/resumes",
+    component: Resumes,
     exact: true,
   },
   {

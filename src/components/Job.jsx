@@ -13,12 +13,12 @@ const Job = ({ job }) => {
       <HStack
         className="hover-shadow"
         textAlign="center"
-        border="1px solid"
-        borderColor="white"
+        // border="1px solid"
+        // borderColor="white"
         borderEndRadius="md"
-        spacing="4"
-        color="white"
-        p="4"
+        spacing="8"
+        bg="white"
+        p="6"
       >
         <Box align="center">
           <Image w="40" h="auto" alt="logo" src={job.recruiter?.logo} />
@@ -29,19 +29,23 @@ const Job = ({ job }) => {
             fontSize="xl"
             fontWeight="semibold"
             textTransform="uppercase"
+            color="black"
           >
             {job.title}
           </Box>
-          <Box>{job.recruiter?.name}</Box>
-          <Grid
-            templateColumns="repeat(2, 1fr)"
-            color="whiteAlpha.800"
-            fontSize="xs"
-          >
-            <HStack>
+          <HStack spacing={4} color="black">
+            <Box>{job.recruiter?.name}</Box>
+            <Box>|</Box>
+            <HStack color={"gray.700"}>
               <Icon as={MdLocationOn} />
               <Box>{job.location}</Box>
             </HStack>
+          </HStack>
+          <Grid
+            templateColumns="repeat(3, 1fr)"
+            color="black"
+            // fontSize="xs"
+          >
             <HStack>
               <Icon as={MdWork} />
               <Box>{job.experience}</Box>

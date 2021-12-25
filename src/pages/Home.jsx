@@ -20,6 +20,7 @@ import {
   getRecruiters,
 } from "utils/callContract";
 import Recruiters from "./Recruiters";
+import job1Img from "assets/images/job1.jpg";
 
 const Home = () => {
   const location = useLocation();
@@ -204,25 +205,30 @@ const Home = () => {
         Công việc phù hợp
       </Box>
 
-      {!loadingJobs ? (
-        <Grid templateColumns="repeat(2, 1fr)" gap="8">
-          {!!_jobs?.length ? (
-            _jobs
-              .slice((currentPage - 1) * perPage, currentPage * perPage)
-              .map((job, idx) => <Job job={job} key={idx} />)
+      <HStack align="stretch" minH="36em">
+        <Box flex="1">
+          {!loadingJobs ? (
+            <Grid gap="4">
+              {!!_jobs?.length ? (
+                _jobs
+                  .slice((currentPage - 1) * perPage, currentPage * perPage)
+                  .map((job, idx) => <Job job={job} key={idx} />)
+              ) : (
+                <GridItem textAlign="center">
+                  <Box fontSize="lg" fontWeight="semibol">
+                    Không có công việc phù hợp
+                  </Box>
+                </GridItem>
+              )}
+            </Grid>
           ) : (
-            <GridItem colSpan="2" textAlign="center">
-              <Box fontSize="lg" fontWeight="semibol">
-                Không có công việc phù hợp
-              </Box>
-            </GridItem>
+            <Box textAlign="center">
+              <Spinner />
+            </Box>
           )}
-        </Grid>
-      ) : (
-        <Box textAlign="center">
-          <Spinner />
         </Box>
-      )}
+        <Box w={72} bgImage={job1Img} bgRepeat={"no-repeat"} />
+      </HStack>
 
       {/* Paging */}
       {!!_jobs.length && (

@@ -204,52 +204,69 @@ const JobDetail = () => {
             borderColor="gray.300"
             borderRadius="md"
           >
-            <Box>
-              <HStack spacing="16" align="flex-start" mb="2">
-                <Box flex="1" fontSize="2xl" fontWeight="semibold">
-                  {job.title}
-                </Box>
-                <Button
-                  id="show_apply"
-                  onClick={onOpen}
-                  textTransform="uppercase"
-                  colorScheme="teal"
-                >
-                  Apply Job
-                </Button>
-              </HStack>
-              <Grid templateColumns="repeat(4, 1fr)" color="whiteAlpha.800">
-                <HStack>
-                  <Icon as={MdLocationOn} />
-                  <Box>{job.location}</Box>
-                </HStack>
-                <HStack>
-                  <Icon as={MdWork} />
-                  <Box>{job.experience}</Box>
-                </HStack>
-                <HStack>
-                  <Icon as={MdMonetizationOn} />
-                  <Box>
-                    {" "}
-                    {job.salaryMin?.toString()} - {job.salaryMax?.toString()}
+            <HStack spacing="8">
+              <Box w="40">
+                <Image
+                  w="100%"
+                  h="auto"
+                  alt="compat_logo"
+                  src={job.recruiter?.logo}
+                />
+              </Box>
+              <Box flex="1">
+                <HStack spacing="16" align="flex-start" mb="2">
+                  <Box flex="1">
+                    <Box fontSize="2xl" fontWeight="semibold">
+                      {job.title}
+                    </Box>
+                    <HStack>
+                      {job.skills?.map((skill, idx) => (
+                        <Box
+                          key={idx}
+                          border="1px solid"
+                          borderColor="whiteAlpha.600"
+                          borderRadius="md"
+                          px="1"
+                        >
+                          {skill}
+                        </Box>
+                      ))}
+                    </HStack>
                   </Box>
+                  <Button
+                    id="show_apply"
+                    onClick={onOpen}
+                    textTransform="uppercase"
+                    colorScheme="teal"
+                  >
+                    Apply Job
+                  </Button>
                 </HStack>
-                <HStack>
-                  <Icon as={ImHourGlass} />
-                  <Box>{timeLeft(job.expiredIn)} left to apply</Box>
-                </HStack>
-              </Grid>
-            </Box>
+                <Grid templateColumns="repeat(4, 1fr)" color="whiteAlpha.800">
+                  <HStack>
+                    <Icon as={MdLocationOn} />
+                    <Box>{job.location}</Box>
+                  </HStack>
+                  <HStack>
+                    <Icon as={MdWork} />
+                    <Box>{job.experience}</Box>
+                  </HStack>
+                  <HStack>
+                    <Icon as={MdMonetizationOn} />
+                    <Box>
+                      {" "}
+                      {job.salaryMin?.toString()} - {job.salaryMax?.toString()}
+                    </Box>
+                  </HStack>
+                  <HStack>
+                    <Icon as={ImHourGlass} />
+                    <Box>{timeLeft(job.expiredIn)} left to apply</Box>
+                  </HStack>
+                </Grid>
+              </Box>
+            </HStack>
             <hr />
             <VStack align="stretch" spacing="4">
-              <Box>
-                <Box fontSize="xl" fontWeight="semibold">
-                  Skills
-                </Box>
-                {job.skills.map((s) => (
-                  <Box>- {s}</Box>
-                ))}
-              </Box>
               <Box>
                 <Box fontSize="xl" fontWeight="semibold">
                   Description
@@ -271,9 +288,7 @@ const JobDetail = () => {
             </VStack>
           </VStack>
 
-          <HStack
-            align="flex-start"
-            spacing="8"
+          <Box
             px="16"
             py="8"
             border="1px solid"
@@ -281,56 +296,61 @@ const JobDetail = () => {
             borderRadius="md"
             mt="10"
           >
-            <Box w="40">
-              <Image
-                w="100%"
-                h="auto"
-                alt="compat_logo"
-                src={job.recruiter?.logo}
-              />
+            <Box fontSize="2xl" fontWeight="semibold" pb="4">
+              GIỚI THIỆU CÔNG TY
             </Box>
-            <VStack flex="1" align="stretch" spacing="3">
-              <Box fontSize="xl" fontWeight="semibold">
-                {job.recruiter?.name}
+            <HStack align="flex-start" spacing="8">
+              <Box w="40">
+                <Image
+                  w="100%"
+                  h="auto"
+                  alt="compat_logo"
+                  src={job.recruiter?.logo}
+                />
               </Box>
-              <HStack align="stretch">
-                <Box textAlign="top">
-                  <Icon as={MdLocationOn} />
+              <VStack flex="1" align="stretch" spacing="3">
+                <Box fontSize="xl" fontWeight="semibold">
+                  {job.recruiter?.name}
                 </Box>
-                <Box>Headquarters: </Box>
-                <Box>{job.recruiter?.headquarter}</Box>
-              </HStack>
-              <HStack>
-                <Box>
-                  <Icon as={IoIosPeople} />
-                </Box>
+                <HStack align="stretch">
+                  <Box textAlign="top">
+                    <Icon as={MdLocationOn} />
+                  </Box>
+                  <Box>Headquarters: </Box>
+                  <Box>{job.recruiter?.headquarter}</Box>
+                </HStack>
+                <HStack>
+                  <Box>
+                    <Icon as={IoIosPeople} />
+                  </Box>
 
-                <Box>Company size: </Box>
-                <Box>{job.recruiter?.companySize} people</Box>
-              </HStack>
-              <HStack>
-                <Icon as={CgWebsite} />
-                <Box>Website: </Box>
-                <Box>{job.recruiter?.website}</Box>
-              </HStack>
+                  <Box>Company size: </Box>
+                  <Box>{job.recruiter?.companySize} people</Box>
+                </HStack>
+                <HStack>
+                  <Icon as={CgWebsite} />
+                  <Box>Website: </Box>
+                  <Box>{job.recruiter?.website}</Box>
+                </HStack>
 
-              <hr />
-              <HStack>
-                <Box>
-                  <Icon as={MdContacts} />
-                </Box>
-                <Box>Contact: </Box>
-                <Box>{job.recruiter?.contact}</Box>
-              </HStack>
-              <HStack>
-                <Box>
-                  <Icon as={MdLocationOn} />
-                </Box>
-                <Box>Company address: </Box>
-                <Box>{job.recruiter?.addr}</Box>
-              </HStack>
-            </VStack>
-          </HStack>
+                <hr />
+                <HStack>
+                  <Box>
+                    <Icon as={MdContacts} />
+                  </Box>
+                  <Box>Contact: </Box>
+                  <Box>{job.recruiter?.contact}</Box>
+                </HStack>
+                <HStack>
+                  <Box>
+                    <Icon as={MdLocationOn} />
+                  </Box>
+                  <Box>Company address: </Box>
+                  <Box>{job.recruiter?.addr}</Box>
+                </HStack>
+              </VStack>
+            </HStack>
+          </Box>
         </>
       ) : (
         <Box textAlign="center">

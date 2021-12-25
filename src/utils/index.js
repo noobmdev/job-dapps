@@ -11,6 +11,7 @@ export const removeNumericKey = (object) => {
 export const timeLeft = (date) => {
   if (!date) return null;
   const seconds = Math.floor((+date * 1000 - Date.now()) / 1000);
+  if (seconds < 0) return "End time";
   let interval = seconds / 31536000;
   if (interval > 1) {
     return Math.floor(interval) + " years";

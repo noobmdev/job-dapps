@@ -319,10 +319,7 @@ const JobsManagement = () => {
           <Spinner />
         </Box>
       ) : (
-        <Grid
-          templateColumns={{ base: "repeat(1, 1fr)", xl: "repeat(2, 1fr)" }}
-          gap="8"
-        >
+        <Grid templateColumns="repeat(1, 1fr)" gap="4">
           {ownerJobs.map((job, idx) => (
             <Job job={job} key={idx} />
           ))}

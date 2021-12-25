@@ -15,6 +15,31 @@ export const getLatestRecruiterId = (library) => {
   }
 };
 
+export const getIsRecuiter = (library, account) => {
+  try {
+    const jobCoreContract = getJobCoreContract(library);
+    return callContract(jobCoreContract, JOB_CORE_METHODS.isRecuiter, [
+      account,
+    ]);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getOwner = async (library, account) => {
+  try {
+    const jobCoreContract = getJobCoreContract(library);
+    const owner = await callContract(
+      jobCoreContract,
+      JOB_CORE_METHODS.owner,
+      []
+    );
+    return owner === account;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getRecruiters = async (library, latestRecruiterId) => {
   try {
     const jobCoreContract = getJobCoreContract(library);
