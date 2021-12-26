@@ -2,12 +2,17 @@ import { FormLabel } from "@chakra-ui/form-control";
 import { Image } from "@chakra-ui/image";
 import { Input } from "@chakra-ui/input";
 import { Box, Grid, GridItem, HStack, VStack } from "@chakra-ui/layout";
+import { Button } from "@chakra-ui/react";
 import { Select } from "@chakra-ui/select";
 import { JOB_CORE_METHODS, ZeroBigNumber } from "configs";
 import { useActiveWeb3React } from "hooks/useActiveWeb3React";
 import { callContract, useJobCoreContract } from "hooks/useContract";
 import React, { useEffect, useState } from "react";
 import { removeNumericKey } from "utils";
+import {
+  getIsPurchasedFee,
+  handlePurchaseFeeRecruiter,
+} from "utils/callContract";
 import RecruiterLayout from "./components/RecruiterLayout";
 
 const companySizes = [
@@ -20,7 +25,7 @@ const companySizes = [
 ];
 
 const Recruiter = () => {
-  const { account } = useActiveWeb3React();
+  const { account, library } = useActiveWeb3React();
 
   const jobCoreContract = useJobCoreContract();
 
@@ -32,6 +37,7 @@ const Recruiter = () => {
     contact: "",
     addr: "",
   });
+  const [isPurchaseFee, setIsPurchaseFee] = useState(false);
 
   useEffect(() => {
     async function getRecruiterProfile() {
@@ -42,19 +48,21 @@ const Recruiter = () => {
           [account]
         );
         if (!ZeroBigNumber.eq(recruiterId)) {
-          const recruiter = await callContract(
-            jobCoreContract,
-            JOB_CORE_METHODS.recruiters,
-            [recruiterId]
-          );
+          const [recruiter, isPurchaseFee] = await Promise.all([
+            callContract(jobCoreContract, JOB_CORE_METHODS.recruiters, [
+              recruiterId,
+            ]),
+            getIsPurchasedFee(library, account),
+          ]);
+          setIsPurchaseFee(isPurchaseFee);
           const _recruiter = removeNumericKey(recruiter);
           setRecruiter((pre) => ({ ...pre, ..._recruiter }));
         }
       }
     }
 
-    getRecruiterProfile();
-  }, [jobCoreContract, account]);
+    account && library && getRecruiterProfile();
+  }, [jobCoreContract, account, library]);
 
   // useEffect(() => {
   //   if (recruiter) {
@@ -63,10 +71,36 @@ const Recruiter = () => {
   //   }
   // }, [recruiter]);
 
+  const [isPurchasing, setIsPurchasing] = useState(false);
+
+  const handlePurchase = async () => {
+    if (!account || !library) return;
+    try {
+      setIsPurchasing(true);
+      await handlePurchaseFeeRecruiter(library, account);
+      setIsPurchaseFee(true);
+      setIsPurchasing(false);
+    } catch (error) {
+      console.log(error);
+      setIsPurchasing(false);
+    }
+  };
+
   return (
     <RecruiterLayout>
       <VStack align="stretch" spacing="4">
         <Box p="6" border="1px solid" borderColor="gray.300" borderRadius="md">
+          {!isPurchaseFee && (
+            <Button
+              colorScheme="teal"
+              mb="4"
+              onClick={handlePurchase}
+              isLoading={isPurchasing}
+            >
+              Purchase Fee
+            </Button>
+          )}
+
           <HStack justify="space-between" align="center" pb="4">
             <Box fontSize="2xl" fontWeight="semibold">
               Company Information

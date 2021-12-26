@@ -1,6 +1,6 @@
 const { BigNumber } = require("@ethersproject/bignumber");
 
-export const JOB_CORE_ADDRESS = "0xf217a335dB239dDBc69581F296443a3954B1ff15";
+export const JOB_CORE_ADDRESS = "0x3Db1f1B257e26F3bEF2972D48e88CbD3a92E8c9d";
 
 export const JOB_CORE_METHODS = {
   getLatestRecruiterId: "getLatestRecruiterId",
@@ -23,6 +23,12 @@ export const JOB_CORE_METHODS = {
   getAppliedJobs: "getAppliedJobs",
   isRecuiter: "isRecuiter",
   owner: "owner",
+  purchaseFeeTimes: "purchaseFeeTimes",
+  purchaseFeeRecruiter: "purchaseFeeRecruiter",
+  getLatestResumeId: "getLatestResumeId",
+  resumeIndexs: "resumeIndexs",
+  resumes: "resumes",
+  resumeOwner: "resumeOwner",
 };
 
 export const OneBigNumber = BigNumber.from("1");

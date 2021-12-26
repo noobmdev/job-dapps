@@ -1,4 +1,6 @@
 import { JOB_CORE_METHODS } from "configs";
+import { BigNumber } from "ethers";
+import { parseEther } from "ethers/lib/utils";
 import { callContract, getJobCoreContract } from "hooks/useContract";
 import { removeNumericKey } from "./index";
 
@@ -40,6 +42,38 @@ export const getOwner = async (library, account) => {
   }
 };
 
+export const getIsPurchasedFee = async (library, account) => {
+  try {
+    const jobCoreContract = getJobCoreContract(library);
+    const timestamp = await callContract(
+      jobCoreContract,
+      JOB_CORE_METHODS.purchaseFeeTimes,
+      [account]
+    );
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    return BigNumber.from(timestamp).gt(
+      BigNumber.from(currentTimestamp.toString())
+    );
+    // return owner === account;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const handlePurchaseFeeRecruiter = async (library, account) => {
+  try {
+    const jobCoreContract = getJobCoreContract(library, account);
+    return callContract(
+      jobCoreContract,
+      JOB_CORE_METHODS.purchaseFeeRecruiter,
+      [],
+      { value: parseEther("0.001") }
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getRecruiters = async (library, latestRecruiterId) => {
   try {
     const jobCoreContract = getJobCoreContract(library);
@@ -59,6 +93,48 @@ export const getRecruiters = async (library, latestRecruiterId) => {
     );
 
     return recruiters;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getResumes = async (library) => {
+  try {
+    if (!library) return;
+    const jobCoreContract = getJobCoreContract(library);
+    if (!jobCoreContract) return [];
+
+    const latestResumeId = await callContract(
+      jobCoreContract,
+      JOB_CORE_METHODS.getLatestResumeId,
+      []
+    );
+
+    const resumes = await Promise.all(
+      new Array(latestResumeId.toString()).fill("").map(async (_, idx) => {
+        const [resumeIdx, owner] = await Promise.all([
+          callContract(jobCoreContract, JOB_CORE_METHODS.resumeIndexs, [
+            idx + 1,
+          ]),
+          callContract(jobCoreContract, JOB_CORE_METHODS.resumeOwner, [
+            idx + 1,
+          ]),
+        ]);
+
+        const resume = await callContract(
+          jobCoreContract,
+          JOB_CORE_METHODS.resumes,
+          [owner, resumeIdx]
+        );
+        const res = await fetch(resume.url);
+        const data = await res.json();
+        return { id: idx + 1, ...data, url: resume.url };
+        // const _recruiter = removeNumericKey(recruiter);
+        // return _recruiter;
+      })
+    );
+
+    return resumes;
   } catch (error) {
     throw error;
   }

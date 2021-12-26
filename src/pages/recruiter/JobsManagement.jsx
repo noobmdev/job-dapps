@@ -140,7 +140,10 @@ const JobsManagement = () => {
       onClose(); // TODO change to refresh
       alert("Tạo công việc mới thành công");
     } catch (error) {
-      console.error(error);
+      error.data?.message &&
+        alert(
+          error.data.message.toString().replace("execution reverted: ", "")
+        );
       setSubmitting(false);
     }
   };

@@ -7,6 +7,7 @@ import Recruiter from "pages/recruiter";
 import JobsManagement from "pages/recruiter/JobsManagement";
 import Resumes from "pages/recruiter/Resumes";
 import Admin from "pages/admin";
+import ResumesManagement from "pages/admin/Resumes";
 
 export const routes = [
   {
@@ -17,6 +18,11 @@ export const routes = [
   {
     path: "/admin",
     component: Admin,
+    exact: true,
+  },
+  {
+    path: "/admin/resumes",
+    component: ResumesManagement,
     exact: true,
   },
   {

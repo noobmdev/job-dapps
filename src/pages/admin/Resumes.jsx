@@ -6,9 +6,9 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import ReactToPrint from "react-to-print";
 import { getResumes } from "utils/callContract";
-import RecruiterLayout from "./components/RecruiterLayout";
+import Layout from "./Layout";
 
-const Resumes = () => {
+const ResumesManagement = () => {
   const { account, library } = useActiveWeb3React();
 
   const [resumes, setResumes] = useState([]);
@@ -36,7 +36,7 @@ const Resumes = () => {
   };
 
   return (
-    <RecruiterLayout>
+    <Layout>
       <ReactToPrint
         trigger={() => (
           <button
@@ -78,8 +78,8 @@ const Resumes = () => {
           </Box>
         ))}
       </Grid>
-    </RecruiterLayout>
+    </Layout>
   );
 };
 
-export default Resumes;
+export default ResumesManagement;

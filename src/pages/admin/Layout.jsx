@@ -6,18 +6,13 @@ import DashboardLayout from "components/layouts/DashboardLayout";
 const menuList = [
   {
     icon: FiUser,
-    name: "Hồ sơ",
-    path: "/recruiter",
+    name: "Recruiters",
+    path: "/admin",
   },
   {
     icon: GoTasklist,
-    name: "Quản lý công việc",
-    path: "/recruiter/jobs-management",
-  },
-  {
-    icon: GoTasklist,
-    name: "Tìm kiếm CV",
-    path: "/recruiter/resumes",
+    name: "Resumes",
+    path: "/admin/resumes",
   },
 ];
 
