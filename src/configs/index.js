@@ -1,6 +1,6 @@
 const { BigNumber } = require("@ethersproject/bignumber");
 
-export const JOB_CORE_ADDRESS = "0xcd3421f4fD6830D9d59AA21a3A1Bd8051476B90C";
+export const JOB_CORE_ADDRESS = "0x64c462Fa912e07a9e40c11E8EAF3c6346564f9bc";
 
 export const JOB_CORE_METHODS = {
   getLatestRecruiterId: "getLatestRecruiterId",
