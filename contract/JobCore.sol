@@ -180,41 +180,29 @@ contract JobCore is Ownable {
     // address => jobIds[]
     mapping(address => uint256[]) public appliedJobs;
 
-    mapping(address => uint256) purchaseFeeTimes;
+    mapping(address => uint256) public purchaseFeeTimes;
     uint256 PURCHASE_FEE = 1e15; // 0.001 ether
 
     /* 
     / === CONSTRUCTOR
     */
     constructor() {
-        address[8] memory recruiterAddresses = [
+        address[3] memory recruiterAddresses = [
             0xe9dd3CC74B6d57E8B27D4bF6cA96ffAeBEF4205e,
             0x78033C72581fDc5593b8120760C70018eD42AA69,
-            0x4Acf773BD581BdF5De5F9E6fc06589C3F6C791F9,
-            0x78033C72581fDc5593b8120760C70018eD42AA69,
-            0x78033C72581fDc5593b8120760C70018eD42AA69,
-            0x78033C72581fDc5593b8120760C70018eD42AA69,
-            0x78033C72581fDc5593b8120760C70018eD42AA69,
-            0x78033C72581fDc5593b8120760C70018eD42AA69
+            0x596d502212f626e98B3604198F904eF6A004674E
         ];
-        string[8] memory names = ["Company 1", "Company 2", "Company 3", "Company 4", "Company 5", "Company 6", "Company 7", "Company 8"];
-        string[8] memory headquarters = ["Headquarter 1", "Headquarter 2", "Headquarter 3", "Headquarter 4", "Headquarter 5", "Headquarter 6", "Headquarter 7", "Headquarter 8"];
-        string[8] memory companySizes = ["1 - 9", "10 - 49", "1 - 9", "50 - 99", "100 - 299", "50 - 99", "300 - 999", "> 1000"];
-        string[8] memory websites = ["https://web1.com", "https://web2.com", "https://web3.com", "https://web4.com", "https://web5.com", "https://web6.com", "https://web7.com", "https://web8.com"];
-        string[8] memory contacts = ["Contact 1", "Contact 2", "Contact 3", "Contact 4", "Contact 5", "Contact 6", "Contact 7", "Contact 8"];
-        string[8] memory addresses = ["Address 1", "Address 2", "Address 3", "Address 4", "Address 5", "Address 6", "Address 7", "Address 8"];
-        string[8] memory logos = [
+        string[3] memory names = ["Company 1", "Company 2", "Company 3"];
+        string[3] memory headquarters = ["Headquarter 1", "Headquarter 2", "Headquarter 3"];
+        string[3] memory companySizes = ["1 - 9", "10 - 49", "1 - 9"];
+        string[3] memory websites = ["https://web1.com", "https://web2.com", "https://web3.com"];
+        string[3] memory contacts = ["Contact 1", "Contact 2", "Contact 3"];
+        string[3] memory addresses = ["Address 1", "Address 2", "Address 3"];
+        string[3] memory logos = [
             "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG1_vtcgeq.png",
             "https://res.cloudinary.com/munumber2/image/upload/v1634401208/NHATUYENDUNG2_j4mhca.png", 
-            "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG3_utjokp.png", 
-            "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG4_h1djot.png", 
-            "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG5_w7xwkp.png", 
-            "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG6_xvzgd8.png", 
-            "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG7_ifgvt0.png", 
-            "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG6_xvzgd8.png"
+            "https://res.cloudinary.com/munumber2/image/upload/v1634401209/NHATUYENDUNG3_utjokp.png"
         ];
-        
-        
         for(uint8 i = 0; i < names.length; i++) {
             addRecruiter(recruiterAddresses[i], names[i], headquarters[i], companySizes[i], websites[i], contacts[i], addresses[i], logos[i]);
         }

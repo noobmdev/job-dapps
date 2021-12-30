@@ -29,6 +29,7 @@ import { callContract, useJobCoreContract } from "hooks/useContract";
 import React, { useEffect, useState } from "react";
 import { removeNumericKey } from "utils";
 import RecruiterLayout from "./components/RecruiterLayout";
+import { Link } from "react-router-dom";
 
 const EXPERIENCES = [
   "No experience",
@@ -324,7 +325,12 @@ const JobsManagement = () => {
       ) : (
         <Grid templateColumns="repeat(1, 1fr)" gap="4">
           {ownerJobs.map((job, idx) => (
-            <Job job={job} key={idx} />
+            <Link
+              key={idx}
+              to={`/recruiter/jobs-management/${job.id?.toString()}`}
+            >
+              <Job job={job} />
+            </Link>
           ))}
         </Grid>
       )}

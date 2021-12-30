@@ -5,6 +5,7 @@ import CandidateAppliedJobs from "pages/candidate/AppliedJobs";
 import Candidate from "pages/candidate";
 import Recruiter from "pages/recruiter";
 import JobsManagement from "pages/recruiter/JobsManagement";
+import JobManagementDetail from "pages/recruiter/JobManagementDetail";
 import Resumes from "pages/recruiter/Resumes";
 import Admin from "pages/admin";
 import ResumesManagement from "pages/admin/Resumes";
@@ -43,6 +44,11 @@ export const routes = [
   {
     path: "/recruiter/jobs-management",
     component: JobsManagement,
+    exact: true,
+  },
+  {
+    path: "/recruiter/jobs-management/:id",
+    component: JobManagementDetail,
     exact: true,
   },
   {

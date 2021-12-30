@@ -11,7 +11,7 @@ import { useActiveWeb3React } from "hooks/useActiveWeb3React";
 import { callContract, useJobCoreContract } from "hooks/useContract";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { MdSearch } from "react-icons/md";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useHistory, Link } from "react-router-dom";
 import { removeNumericKey } from "utils";
 import {
   getJobs,
@@ -212,7 +212,11 @@ const Home = () => {
               {!!_jobs?.length ? (
                 _jobs
                   .slice((currentPage - 1) * perPage, currentPage * perPage)
-                  .map((job, idx) => <Job job={job} key={idx} />)
+                  .map((job, idx) => (
+                    <Link key={idx} to={`/jobs/${job.id?.toString()}`}>
+                      <Job job={job} />
+                    </Link>
+                  ))
               ) : (
                 <GridItem textAlign="center">
                   <Box fontSize="lg" fontWeight="semibol">

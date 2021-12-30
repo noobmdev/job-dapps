@@ -1,5 +1,5 @@
 import React from "react";
-import { FiUser } from "react-icons/fi";
+import { FiUser, FiSearch } from "react-icons/fi";
 import { GoTasklist } from "react-icons/go";
 import DashboardLayout from "components/layouts/DashboardLayout";
 
@@ -15,7 +15,7 @@ const menuList = [
     path: "/recruiter/jobs-management",
   },
   {
-    icon: GoTasklist,
+    icon: FiSearch,
     name: "Tìm kiếm CV",
     path: "/recruiter/resumes",
   },
