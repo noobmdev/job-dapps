@@ -167,7 +167,7 @@ contract JobCore is Ownable {
     mapping(address => uint256[]) public ownerJobs;
     
     // address => Resume[]
-    mapping(address => Resume[]) resumes;
+    mapping(address => Resume[]) public resumes;
     // resumeId => owner
     mapping(uint256 => address) public resumeOwner;
     // resumeId => resumeIndex
@@ -443,4 +443,29 @@ contract JobCore is Ownable {
         return resumes[owner][idx];
     }
     
+
+
+    mapping(address => uint256[]) public jobInvited;
+    // jobId => resumeId => bool
+    mapping(uint256 => mapping(uint256 => bool)) invites;
+    mapping(uint256 => mapping(uint256 => bool)) acceptedJobs;
+    uint256 public INVITE_FEE = 0.02 ether;
+
+    function inviteCandidate(uint256 _jobId, uint256 _resumeId) payable external {
+        require(!invites[_jobId][_resumeId], "already_invite_candidate");
+        require(msg.value >= INVITE_FEE, "send_not_enough_invite_fee");
+        invites[_jobId][_resumeId] = true;
+        jobInvited[resumeOwner[_resumeId]].push(_jobId);
+    }
+
+    function getOwnerInvited(address account) external view returns(uint256[] memory) {
+        return jobInvited[account];
+    }
+
+    function acceptJob(uint256 _jobId, uint256 _resumeId) external {
+        require(invites[_jobId][_resumeId], "not_invited_to_accept");
+        require(!acceptedJobs[_jobId][_resumeId], "already_accpet_job");
+        invites[_jobId][_resumeId] = true;
+        jobInvited[resumeOwner[_resumeId]].push(_jobId);
+    }
 }
